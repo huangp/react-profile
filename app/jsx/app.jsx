@@ -275,7 +275,7 @@ var DropDown = React.createClass(
 
       return (
         <span className="dropdown dropdown--inline js-dropdown">
-          <a className="dropdown__toggle dropdown__toggle--large js-dropdown__toggle" href="#">{selected}</a>
+          <a className="dropdown__toggle js-dropdown__toggle" href="#">{selected}</a>
           <ul className="dropdown__content js-dropdown__content">
           {optionList}
           </ul>
@@ -289,28 +289,95 @@ var RecentContributions = React.createClass(
   {
     getDefaultProps: function() {
       return {
+        // TODO change to authenticated user
+        baseUrl: 'rest/stats/user/',
         dateRangeOptions: ['This Week', 'Last Week', 'This Month', 'Last Month']
       }
     },
 
     getInitialState: function() {
       return {
-        selectedDateRange: this.props.dateRangeOptions[0]
+        selectedDateRange: this.props.dateRangeOptions[0],
+        date: {}
+      }
+    },
+
+    componentDidMount: function() {
+      var dateRange = this.getDateRangeFromState();
+      $.ajax(
+        {
+          url: this.props.baseUrl + 'admin/' + dateRange.fromDate + '..' + dateRange.toDate,
+          dataType: 'json',
+          headers: {
+            // TODO remove this
+            'X-Auth-User': 'admin',
+            'X-Auth-Token': 'b6d7044e9ee3b2447c28fb7c50d86d98'
+          },
+          success: function (data) {
+            this.setState(
+              {
+                data: data,
+                selectedDateRange: this.state.selectedDateRange
+              }
+            );
+          }.bind(this),
+          error: function (xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        }
+      );
+    },
+
+    getDateRangeFromState: function() {
+      var now = moment(),
+        dateFormat = 'YYYY-MM-DD',
+        fromDate,
+        toDate;
+
+      switch(this.state.selectedDateRange) {
+        case 'This Week':
+          fromDate = moment().weekday(0).format(dateFormat);
+          toDate = moment().format(dateFormat);
+          break;
+        case 'Last Week':
+          fromDate = moment().weekday(-7).format(dateFormat);
+          toDate = moment().weekday(-1).format(dateFormat);
+          break;
+        case 'This Month':
+          fromDate = moment().date(1).format(dateFormat);
+          toDate = moment().format(dateFormat);
+          break;
+        case 'Last Month':
+          fromDate = moment().month(now.month() - 1).date(1).format(dateFormat);
+          toDate = moment().date(0).format(dateFormat);
+          break;
+        default:
+          console.error('selectedDateRange [%s] can not be matched. Using (This Week) instead.', this.state.selectedDateRange);
+          fromDate = moment().weekday(0).format(dateFormat);
+          toDate = moment().format(dateFormat);
+      }
+
+      console.info('%s - %s', fromDate, toDate);
+      return {
+        fromDate: fromDate, toDate: toDate
       }
     },
 
     onDateRangeSelection: function(dateRange) {
-      this.setState({selectedDateRange: dateRange});
+      var newState = React.addons.update(this.state, {
+        selectedDateRange: {$set: dateRange}
+      });
+      this.setState(newState);
     },
 
     render: function() {
-      var fromDate = '2015-02-03',
-        toDate = '2015-02-10';
+      var dateRange = this.getDateRangeFromState();
+
       return (
         <div>
           <span className='txt--uppercase txt--important'>Recent Contributions</span>
           <DropDown options={this.props.dateRangeOptions} selectedOption={this.state.selectedDateRange} onOptionSelection={this.onDateRangeSelection} />
-          <FilterableMatrixTable matrixData={this.props.matrixData} fromDate={fromDate} toDate={toDate} />
+          <FilterableMatrixTable matrixData={this.state.data} fromDate={dateRange['fromDate']} toDate={dateRange['toDate']} />
         </div>
       )
     }
@@ -352,4 +419,4 @@ var data = {
   ]
 };
 
-React.render(<RecentContributions matrixData={data} />, document.getElementById('mountPoint'));
+React.render(<RecentContributions />, document.getElementById('mountPoint'));

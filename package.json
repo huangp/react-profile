@@ -1,0 +1,26 @@
+{
+  "name": "react",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "pahuang",
+  "license": "BSD",
+  "devDependencies": {
+    "gulp": "~3.8.10",
+    "gulp-concat": "~2.4.3",
+    "gulp-bower-normalize": "~1.0.3",
+    "main-bower-files": "~2.5.0",
+    "gulp-react": "~2.0.0",
+    "del": "~1.1.1",
+    "gulp-plumber": "~0.6.6",
+    "gulp-webserver": "~0.9.0",
+    "gulp-notify": "~2.2.0",
+    "gulp-batch": "~1.0.5"
+  },
+  "dependencies": {
+    "gulp-watch": "~4.1.1"
+  }
+}

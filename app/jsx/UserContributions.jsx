@@ -312,17 +312,19 @@ var ContributionChart = React.createClass(
           ]
         };
 
-        _.forOwn(matrixData, function(value, key) {
-          var total;
+        matrixData.forEach(function(value) {
+          var date = _.keys(value)[0],
+            total;
 
-          chartData.labels.push(RecentContributions.dayAsLabel(key, dateRangeOption));
+          chartData.labels.push(RecentContributions.dayAsLabel(date, dateRangeOption));
 
-          total = ContributionChart.getTotalWordCountsForDay(value);
+          total = ContributionChart.getTotalWordCountsForDay(value[date]);
 
           chartData['datasets'][0]['data'].push(total['totalApproved']);
           chartData['datasets'][1]['data'].push(total['totalTranslated']);
           chartData['datasets'][2]['data'].push(total['totalNeedsWork']);
         });
+
         return chartData;
       }
     },
@@ -343,8 +345,28 @@ var ContributionChart = React.createClass(
 
     componentDidUpdate: function() {
       var ctx = this.getDOMNode().getContext("2d"),
-        chartData = ContributionChart.convertMatrixDataToChartData(this.props.matrixData, this.props.dateRange);
-      ContributionChart.chart = new Chart(ctx).Line(chartData);
+        chart = ContributionChart.chart,
+        chartData = ContributionChart.convertMatrixDataToChartData(this.props.matrixData, this.props.dateRange),
+        previousLabels = chart.datasets[0]['points'].length,
+        newLabels = chartData['labels'].length,
+        maxIter = Math.max(previousLabels, newLabels);
+
+
+      console.info('before remove:' + previousLabels);
+      for (var i = 0; i < maxIter; i++) {
+        if (i < previousLabels) {
+          chart.removeData();
+        }
+        if (i < newLabels) {
+          var label = chartData['labels'][i];
+          console.log('adding label', label);
+          chart.addData([
+                          chartData['datasets'][0]['data'][i],
+                          chartData['datasets'][1]['data'][i],
+                          chartData['datasets'][2]['data'][i]
+                        ], label);
+        }
+      }
 
     },
 
@@ -359,47 +381,58 @@ var ContributionChart = React.createClass(
 var RecentContributions = React.createClass(
   {
     statics: {
-      getDateRangeFromState: function (dateRangeOption) {
+      dateFormat: 'YYYY-MM-DD',
+      getDateRangeFromOption: function (dateRangeOption) {
         var now = moment(),
-          dateFormat = 'YYYY-MM-DD',
+          dateFormat = RecentContributions.dateFormat,
+          dates = [],
+          range,
           fromDate,
           toDate;
 
         switch(dateRangeOption) {
           case 'This Week':
-            fromDate = moment().weekday(0).format(dateFormat);
-            toDate = moment().format(dateFormat);
+            fromDate = moment().weekday(0);
+            toDate = moment();
             break;
           case 'Last Week':
-            fromDate = moment().weekday(-7).format(dateFormat);
-            toDate = moment().weekday(-1).format(dateFormat);
+            fromDate = moment().weekday(-7);
+            toDate = moment().weekday(-1);
             break;
           case 'This Month':
-            fromDate = moment().date(1).format(dateFormat);
-            toDate = moment().format(dateFormat);
+            fromDate = moment().date(1);
+            toDate = moment();
             break;
           case 'Last Month':
-            fromDate = moment().month(now.month() - 1).date(1).format(dateFormat);
-            toDate = moment().date(0).format(dateFormat);
+            fromDate = moment().month(now.month() - 1).date(1);
+            toDate = moment().date(0);
             break;
           default:
             console.error('selectedDateRange [%s] can not be matched. Using (This Week) instead.', dateRangeOption);
-            fromDate = moment().weekday(0).format(dateFormat);
-            toDate = moment().format(dateFormat);
+            fromDate = moment().weekday(0);
+            toDate = moment();
         }
 
+        range = moment().range(fromDate, toDate);
+
+        range.by('days', function(moment) {
+          dates.push(moment.format(dateFormat));
+        });
+
         return {
-          fromDate: fromDate, toDate: toDate
+          fromDate: fromDate.format(dateFormat),
+          toDate: toDate.format(dateFormat),
+          dates: dates
         }
       },
 
       dayAsLabel: function(dateStr, dateRangeOption) {
         var weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-          date = moment(dateStr.split(' ')[0]),
+          date = moment(dateStr),
           day;
 
         if (dateRangeOption.indexOf('Week') > 0) {
-          day = date.day();
+          day = date.weekday();
           return weekDays[day];
         } else {
           return date.date(); // day of month
@@ -424,7 +457,7 @@ var RecentContributions = React.createClass(
     },
 
     loadFromServer: function(dateRangeOption) {
-      var dateRange = RecentContributions.getDateRangeFromState(dateRangeOption);
+      var dateRange = RecentContributions.getDateRangeFromOption(dateRangeOption);
       console.info('about to load from server: %s..%s', dateRange.fromDate, dateRange.toDate);
       $.ajax(
         {
@@ -451,12 +484,23 @@ var RecentContributions = React.createClass(
     },
 
     render: function() {
-      var dateRange = RecentContributions.getDateRangeFromState(this.state.selectedDateRange);
+      var dataInState = this.state.data,
+        dateRange = RecentContributions.getDateRangeFromOption(this.state.selectedDateRange),
+        paddedData = [],
+        datesOfThisWeek = dateRange['dates'];
 
+      // fill in dates where there is no data in it
+      datesOfThisWeek.forEach(function(date) {
+        var entry = {};
+        entry[date] = dataInState[date] || [];
+        paddedData.push(entry);
+      });
+
+      console.info(paddedData);
       return (
         <div>
           <div>
-            <ContributionChart matrixData={this.state.data} dateRange={this.state.selectedDateRange} />
+            <ContributionChart matrixData={paddedData} dateRange={this.state.selectedDateRange} />
           </div>
           <span className='txt--uppercase txt--important'>Recent Contributions</span>
           <DropDown options={this.props.dateRangeOptions} selectedOption={this.state.selectedDateRange} onOptionSelection={this.onDateRangeSelection} />

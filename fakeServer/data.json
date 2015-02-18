@@ -1,5 +1,5 @@
 {
-  "2015-02-09 Australia/Brisbane": [
+  "2015-02-09": [
     {
       "projectSlug": "properties-test",
       "versionSlug": "master",
@@ -15,7 +15,7 @@
       "wordCount": 6
     }
   ],
-  "2015-02-10 Australia/Brisbane": [
+  "2015-02-10": [
     {
       "projectSlug": "properties-test",
       "versionSlug": "master",

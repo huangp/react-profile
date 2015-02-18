@@ -1,0 +1,34 @@
+{
+  "2015-02-09 Australia/Brisbane": [
+    {
+      "projectSlug": "properties-test",
+      "versionSlug": "master",
+      "localeId": "fr",
+      "savedState": "Translated",
+      "wordCount": 8
+    },
+    {
+      "projectSlug": "properties-test",
+      "versionSlug": "master",
+      "localeId": "fr",
+      "savedState": "NeedReview",
+      "wordCount": 6
+    }
+  ],
+  "2015-02-10 Australia/Brisbane": [
+    {
+      "projectSlug": "properties-test",
+      "versionSlug": "master",
+      "localeId": "fr",
+      "savedState": "Translated",
+      "wordCount": 14
+    },
+    {
+      "projectSlug": "properties-test",
+      "versionSlug": "master",
+      "localeId": "es",
+      "savedState": "NeedReview",
+      "wordCount": 7
+    }
+  ]
+}

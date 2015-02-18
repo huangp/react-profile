@@ -11,8 +11,11 @@ var gulp = require('gulp'),
   notify = require('gulp-notify'),
   path = {
     bowerDeps: './bower_dependencies/',
+    bowerComps: './bower_components/',
+    npmDeps: './node_modules/',
     build: './build/',
-    jsxBuild: './build/jsx/'
+    jsxBuild: './build/jsx/',
+    fakeServerData: './fakeServer/'
   }
 ;
 
@@ -40,21 +43,30 @@ gulp.task('jsxTransform', function() {
 });
 
 gulp.task('jsLibs', ['bowerMain'], function() {
-  return gulp.src(path.bowerDeps + '**/*')
+  return gulp.src(path.bowerDeps + '**/*.js')
     .pipe(concat('libs.js'))
+    .pipe(gulp.dest(path.build))
+});
+
+gulp.task('cssLibs', ['bowerMain'], function() {
+  return gulp.src(path.bowerDeps + "**/*.css")
+    .pipe(concat('libs.css'))
     .pipe(gulp.dest(path.build))
 });
 
 gulp.task('jsApp', ['jsxTransform'], function() {
   return gulp.src(path.jsxBuild + "*.js")
-    .pipe(concat('app.js'))
+    //.pipe(concat('UserContributions.js'))
     .pipe(gulp.dest(path.build))
 });
 
 gulp.task('clean' ,function(cb) {
   del([
         path.jsxBuild + "**",
-        path.build + "**"
+        path.build + "**",
+        path.bowerDeps + "**",
+        path.bowerComps + "**",
+        path.npmDeps + "**"
         // we don't want to clean this file though so we negate the pattern
         //'!dist/mobile/deploy.json'
       ], cb);
@@ -74,13 +86,21 @@ gulp.task('copyIndex', function() {
 });
 
 gulp.task('webserver', ['build'], function() {
-  gulp.src(path.build)
+  gulp.src([path.build, path.fakeServerData])
     .pipe(webserver(
               {livereload: false, port: 8888}
             ));
 });
 
-gulp.task('build', ['jsApp', 'jsLibs', 'copyIndex']);
+gulp.task('build', ['jsApp', 'jsLibs', 'cssLibs', 'copyIndex']);
+
+gulp.task('copyDist', ['build'], function() {
+  gulp.src(path.build + 'UserContributions.js')
+    .pipe(gulp.dest('/home/pahuang/work/root/server/zanata-war/src/main/webapp/resources/script/'));
+  gulp.src(path.build + 'UserContributions.js')
+    .pipe(gulp.dest('/NotBackedUp/tools/jboss-eap/standalone/deployments/zanata.war/resources/script/'))
+
+});
 
 gulp.task('default', ['webserver', 'watch'], function() {
 

@@ -52,15 +52,16 @@ var MatrixTable = React.createClass(
   {
     render: function() {
       var rows = [],
-        daySelectionHandler = this.props.onDaySelection;
+        matrixTable = this;
 
       _.forOwn(this.props.matrixData, (function(value, key) {
-        var totalWordCount = 0;
+        var totalWordCount = 0, day;
         value.forEach(function(matrix) {
           totalWordCount += matrix['wordCount'];
         });
+        day = RecentContributions.dayAsLabel(key, matrixTable.props.dateRange);
         rows.push(<div key={key} className='w--1 g__item'>
-                    <DayMatrix date={key} wordCount={totalWordCount} onDaySelection={daySelectionHandler} />
+                    <DayMatrix date={day} wordCount={totalWordCount} onDaySelection={matrixTable.props.onDaySelection} />
                   </div>);
       }));
       return (
@@ -197,11 +198,10 @@ var FilterableMatrixTable = React.createClass(
       } else {
         filteredByContentStateAndFlattenedData = _.flatten(_.values(filteredByContentStateData));
       }
-      //console.log(this.props.matrixData);
       return (
         <div>
           <ContentStateFilter {...this.props} selectedContentState={this.state.selectedContentState} onContentStateSelection={this.onContentStateSelection} />
-          <MatrixTable matrixData={filteredByContentStateData} onDaySelection={this.onDaySelection} />
+          <MatrixTable matrixData={filteredByContentStateData} onDaySelection={this.onDaySelection} dateRange={this.props.dateRange} />
           <CalendarPeriodHeading fromDate={this.props.fromDate} toDate={this.props.toDate} dateRange={this.props.dateRange}/>
           <CategoryMatrixTable matrixData={filteredByContentStateAndFlattenedData} category='localeId' categoryName='Languages' />
           <CategoryMatrixTable matrixData={filteredByContentStateAndFlattenedData} category='projectSlug' categoryName='Projects' />
@@ -262,9 +262,11 @@ var ContributionChart = React.createClass(
             case 'Translated':
               totalTranslated += matrix['wordCount'];
               break;
-            case 'NeedsReview':
+            case 'NeedReview':
               totalNeedsWork += matrix['wordCount'];
               break;
+            default:
+              throw new Error('unrecognized state:' + matrix['savedState']);
           }
         });
         return {
@@ -273,20 +275,38 @@ var ContributionChart = React.createClass(
           totalNeedsWork: totalNeedsWork
         }
       },
-      convertMatrixDataToChartData: function(matrixData) {
+      convertMatrixDataToChartData: function(matrixData, dateRangeOption) {
         var chartData = {
           labels: [],
-          series: [
+          datasets: [
             {
-              name: 'Approved',
+              label: 'Approved',
+              fillColor: "rgba(78, 159, 221, 0.2)",
+              strokeColor: 'rgba(78, 159, 221, 1)',
+              pointColor: 'rgba(78, 159, 221, 1)',
+              pointStrokeColor: '#fff',
+              pointHighlightFill: '#fff',
+              pointHighlightStroke: 'rgba(78, 159, 221, 1)',
               data: []
             },
             {
-              name: 'Translated',
+              label: 'Translated',
+              fillColor: 'rgba(112,169,139, 0.2)',
+              strokeColor: 'rgba(112,169,139,1)',
+              pointColor: 'rgba(112,169,139,1)',
+              pointStrokeColor: '#fff',
+              pointHighlightFill: '#fff',
+              pointHighlightStroke: 'rgba(112,169,139,1)',
               data: []
             },
             {
-              name: 'Needs Work',
+              label: 'Needs Work',
+              fillColor: 'rgba(224,195,80, 0.2)',
+              strokeColor: 'rgba(224,195,80,1)',
+              pointColor: 'rgba(224,195,80,1)',
+              pointStrokeColor: '#fff',
+              pointHighlightFill: '#fff',
+              pointHighlightStroke: 'rgba(224,195,80,1)',
               data: []
             }
           ]
@@ -295,42 +315,42 @@ var ContributionChart = React.createClass(
         _.forOwn(matrixData, function(value, key) {
           var total;
 
-          chartData.labels.push(key);
+          chartData.labels.push(RecentContributions.dayAsLabel(key, dateRangeOption));
 
           total = ContributionChart.getTotalWordCountsForDay(value);
 
-          chartData['series'][0]['data'].push(total['totalApproved']);
-          chartData['series'][1]['data'].push(total['totalTranslated']);
-          chartData['series'][2]['data'].push(total['totalNeedsWork']);
+          chartData['datasets'][0]['data'].push(total['totalApproved']);
+          chartData['datasets'][1]['data'].push(total['totalTranslated']);
+          chartData['datasets'][2]['data'].push(total['totalNeedsWork']);
         });
         return chartData;
       }
     },
 
-    componentDidMount: function() {
-      var chart = this,
-        chartData = ContributionChart.convertMatrixDataToChartData(this.props.matrixData);
-
-      console.info('componentDidMount: %s', chartData);
-      ContributionChart.chart = new Chartist.Bar('.ct-chart', chartData);
-      console.log('chart instance stored?' + ContributionChart.chart);
+    getDefaultProps: function() {
+      return {
+        width: 400,
+        height: 300
+      }
     },
 
-    componentWillUpdate: function(nextProps, nextState) {
-      var chartData = ContributionChart.convertMatrixDataToChartData(
-        nextProps.matrixData);
-      ContributionChart.chart.update(chartData);
+    componentDidMount: function() {
+      var ctx = this.getDOMNode().getContext("2d"),
+        chartData = ContributionChart.convertMatrixDataToChartData(this.props.matrixData, this.props.dateRange);
+
+      ContributionChart.chart = new Chart(ctx).Line(chartData);
+    },
+
+    componentDidUpdate: function() {
+      var ctx = this.getDOMNode().getContext("2d"),
+        chartData = ContributionChart.convertMatrixDataToChartData(this.props.matrixData, this.props.dateRange);
+      ContributionChart.chart = new Chart(ctx).Line(chartData);
+
     },
 
     render: function() {
-      var chartData = ContributionChart.convertMatrixDataToChartData(
-        this.props.matrixData);
-      if (ContributionChart.chart) {
-        ContributionChart.chart.update(chartData);
-      }
-      console.log('rendering chart');
       return (
-        <div className="ct-chart ct-perfect-fourth"></div>
+        <canvas width={this.props.width} height={this.props.height}></canvas>
       )
     }
   }
@@ -370,6 +390,19 @@ var RecentContributions = React.createClass(
 
         return {
           fromDate: fromDate, toDate: toDate
+        }
+      },
+
+      dayAsLabel: function(dateStr, dateRangeOption) {
+        var weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+          date = moment(dateStr.split(' ')[0]),
+          day;
+
+        if (dateRangeOption.indexOf('Week') > 0) {
+          day = date.day();
+          return weekDays[day];
+        } else {
+          return date.date(); // day of month
         }
       }
     },
@@ -422,7 +455,9 @@ var RecentContributions = React.createClass(
 
       return (
         <div>
-          <ContributionChart matrixData={this.state.data} />
+          <div>
+            <ContributionChart matrixData={this.state.data} dateRange={this.state.selectedDateRange} />
+          </div>
           <span className='txt--uppercase txt--important'>Recent Contributions</span>
           <DropDown options={this.props.dateRangeOptions} selectedOption={this.state.selectedDateRange} onOptionSelection={this.onDateRangeSelection} />
           <FilterableMatrixTable matrixData={this.state.data} fromDate={dateRange['fromDate']} toDate={dateRange['toDate']} dateRange={this.state.selectedDateRange} />

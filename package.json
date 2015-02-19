@@ -1,26 +1,30 @@
 {
-  "name": "react",
-  "version": "0.0.0",
+  "name": "react-profile",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "js": "webpack",
+    "build": "npm run js",
+    "start": "node server.js"
   },
-  "author": "pahuang",
+  "author": "Patrick Huang",
   "license": "BSD",
   "devDependencies": {
-    "gulp": "~3.8.10",
-    "gulp-concat": "~2.4.3",
-    "gulp-bower-normalize": "~1.0.3",
-    "main-bower-files": "~2.5.0",
-    "gulp-react": "~2.0.0",
-    "del": "~1.1.1",
-    "gulp-plumber": "~0.6.6",
-    "gulp-webserver": "~0.9.0",
-    "gulp-notify": "~2.2.0",
-    "gulp-batch": "~1.0.5",
-    "gulp-watch": "~4.1.1"
+    "babel-core": "^4.3.0",
+    "babel-loader": "^4.0.0",
+    "jsx-loader": "^0.12.2",
+    "react-hot-loader": "^1.1.1",
+    "webpack": "^1.5.3",
+    "webpack-dev-server": "^1.7.0"
   },
   "dependencies": {
+    "chart.js": "^1.0.1",
+    "lodash": "^3.2.0",
+    "moment": "^2.9.0",
+    "moment-range": "^1.0.6",
+    "react": "^0.12.2",
+    "react-chartjs": "^0.4.0"
   }
 }

@@ -1,4 +1,5 @@
-build/
-bower_components/
-bower_dependencies/
 node_modules/
+bower_dependencies/
+bower_components/
+bundle.js*
+build/

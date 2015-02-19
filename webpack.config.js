@@ -23,9 +23,13 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({ "global.GENTLY": false })
   ],
   resolve: {
     extensions: ['', '.js', '.json']
+  },
+  node: {
+    __dirname: true
   }
 };

@@ -1,4 +1,8 @@
 import React from 'react';
 import RecentContributions from './lib/components/recentContributions';
 
-React.render(<RecentContributions baseUrl='./lib/stores/userStats.json?foo=' />, document.getElementById('userMatrixRoot'));
+var mountNode = document.getElementById('userMatrixRoot'),
+  baseUrl;
+baseUrl = mountNode.getAttribute('data-base-url');
+
+React.render(<RecentContributions baseUrl={baseUrl} />, mountNode);

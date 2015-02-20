@@ -3,8 +3,6 @@ var webpack = require('webpack');
 module.exports = {
   context: __dirname,
   entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/dev-server',
     './index.js',
   ],
   output: {

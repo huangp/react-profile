@@ -6,7 +6,7 @@
 
 ## Options
 
-### Build
+### Production Build
 
 `npm run build`
 

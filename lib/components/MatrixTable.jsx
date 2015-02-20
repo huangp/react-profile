@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
-import DayMatrix from '../dayMatrix';
-import utilsDate from '../../utilities/utilsDate';
+import DayMatrix from './DayMatrix';
+import utilsDate from '../utils/DateHelper';
 
 var MatrixTable = React.createClass({
   render: function() {
@@ -14,12 +14,10 @@ var MatrixTable = React.createClass({
         totalWordCount += matrix['wordCount'];
       });
       day = utilsDate.dayAsLabel(key, matrixTable.props.dateRange);
-      rows.push(<div key={key} className='w--1 g__item'>
-                  <DayMatrix date={day} wordCount={totalWordCount} onDaySelection={matrixTable.props.onDaySelection} />
-                </div>);
+      rows.push(<DayMatrix date={day} key={key} wordCount={totalWordCount} onDaySelection={matrixTable.props.onDaySelection} />);
     }));
     return (
-      <div className='g'>
+      <div>
         {rows}
       </div>
     );

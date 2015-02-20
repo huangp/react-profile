@@ -1,15 +1,15 @@
 import React from 'react/addons';
 import _ from 'lodash';
-import ContentStateFilter from '../contentStateFilter';
-import MatrixTable from '../matrixTable';
-import CalendarPeriodHeading from '../calendarPeriodHeading';
-import CategoryMatrixTable from '../categoryMatrixTable';
+import ContentStateFilter from './ContentStateFilter';
+import MatrixTable from './MatrixTable';
+import CalendarPeriodHeading from './CalendarPeriodHeading';
+import CategoryMatrixTable from './CategoryMatrixTable';
 
 var FilterableMatrixTable = React.createClass({
   getDefaultProps: function() {
     return {
       contentStateOptions: [
-        ['Total',''],
+        ['Total', 'txt--secondary'],
         ['Approved', 'txt--highlight'],
         ['Translated', 'txt--success'],
         ['Needs Work', 'txt--unsure']]

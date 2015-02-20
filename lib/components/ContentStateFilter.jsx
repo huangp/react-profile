@@ -12,17 +12,20 @@ var ContentStateFilter = React.createClass({
       selected = this.props.selectedContentState,
       clickHandler = this.onFilterOptionClicked;
 
-    this.props.contentStateOptions.forEach(function(optionAndStyle) {
+    optionItems = this.props.contentStateOptions.map(function(optionAndStyle) {
       var option = optionAndStyle[0],
-        optionStyle = optionAndStyle[1];
+          optionStyle = optionAndStyle[1],
+          buttonStyle = selected === option ? 'is-active' : optionStyle;
 
-      var buttonStyle = selected === option ? 'badge--highlight' : optionStyle;
-      optionItems.push(<span key={option} onClick={clickHandler} className={buttonStyle + ' l--pad-h-quarter txt--align-center w--1-4 g__item'}>
-                         {option}
-                       </span>);
+      return (
+        <button key={option} onClick={clickHandler} className={buttonStyle + ' button--link l--pad-h-quarter txt--align-center'}>
+          {option}
+        </button>
+      );
+
     });
     return (
-      <div className='g'>{optionItems}</div>
+      <div>{optionItems}</div>
     );
   }
 });

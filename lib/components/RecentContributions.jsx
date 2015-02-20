@@ -1,9 +1,9 @@
 import React from 'react';
-import ContributionChart from '../contributionChart';
-import DropDown from '../dropDown';
-import FilterableMatrixTable from '../filterableMatrixTable';
-import utilsDate from '../../utilities/utilsDate';
 import Request from 'superagent';
+import ContributionChart from './ContributionChart';
+import DropDown from './DropDown';
+import FilterableMatrixTable from './FilterableMatrixTable';
+import utilsDate from '../utils/DateHelper';
 
 var RecentContributions = React.createClass(
   {
@@ -28,7 +28,7 @@ var RecentContributions = React.createClass(
       var dateRange = utilsDate.getDateRangeFromOption(dateRangeOption),
         url = this.props.baseUrl + dateRange.fromDate + '..' + dateRange.toDate;
 
-      console.info('about to load from server: %s..%s', dateRange.fromDate, dateRange.toDate);
+      // console.info('about to load from server: %s..%s', dateRange.fromDate, dateRange.toDate);
 
       Request.get(url).end((function (res) {
         if (res.ok) {
@@ -45,7 +45,6 @@ var RecentContributions = React.createClass(
     },
 
     onDateRangeSelection: function(dateRange) {
-      console.log('%s -> %s', this.state.selectedDateRange, dateRange);
       this.loadFromServer(dateRange);
     },
 
@@ -62,14 +61,15 @@ var RecentContributions = React.createClass(
         paddedData.push(entry);
       });
 
-      console.info(paddedData);
       return (
-        <div>
+        <div className="l__wrapper">
+          <ContributionChart matrixData={paddedData} dateRange={this.state.selectedDateRange} />
           <div>
-            <ContributionChart matrixData={paddedData} dateRange={this.state.selectedDateRange} />
+            <div className="l--float-right">
+              <DropDown options={this.props.dateRangeOptions} selectedOption={this.state.selectedDateRange} onOptionSelection={this.onDateRangeSelection} />
+            </div>
+            <h2 className='delta txt--uppercase'>Recent Contributions</h2>
           </div>
-          <span className='txt--uppercase txt--important'>Recent Contributions</span>
-          <DropDown options={this.props.dateRangeOptions} selectedOption={this.state.selectedDateRange} onOptionSelection={this.onDateRangeSelection} />
           <FilterableMatrixTable matrixData={this.state.data} fromDate={dateRange['fromDate']} toDate={dateRange['toDate']} dateRange={this.state.selectedDateRange} />
         </div>
       )

@@ -10,24 +10,23 @@ module.exports = {
   output: {
     path: __dirname,
     filename: 'bundle.js',
-    sourceMapFilename: 'bundle.js.map'
+    pathinfo: true
   },
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'react-hot!jsx-loader?harmony!babel'
+        loader: 'babel-loader'
       }
     ]
   },
-  devtool: 'source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({ "global.GENTLY": false })
   ],
   resolve: {
-    extensions: ['', '.js', '.json']
+    extensions: ['', '.js', '.jsx', '.json']
   },
   node: {
     __dirname: true

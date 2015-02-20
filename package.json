@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "js": "webpack",
-    "build": "webpack -p",
-    "start": "webpack & node server.js"
+    "build": "NODE_ENV=production webpack -p",
+    "dev": "webpack-dev-server --port 3000 --devtool eval --hot --progress --colors",
+    "start": "webpack -d & node server.js"
   },
   "author": "Patrick Huang",
   "license": "BSD",

@@ -1,17 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html class="new-zanata">
 <head lang="en">
   <meta charset="UTF-8">
   <link type="text/css" rel="stylesheet" href="http://assets-zanata.rhcloud.com/6/assets/css/style.css">
   <title>Zanata Profile</title>
+  <script type="text/javascript">
+    WebFontConfig = {
+      google: { families: [ 'Source+Sans+Pro:300,400,600,700,400italic:latin,latin-ext' ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })();
+  </script>
 </head>
-<body class="new-zanata">
+<body class="new-zanata zanata">
   <div id="userMatrixRoot" data-base-url="./lib/stores/userStats.json?foo=" ></div>
 
-  <!-- for dropdown to work -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="http://assets-zanata.rhcloud.com/6/assets/js/script.js"></script>
-
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" ></script>
   <script src="bundle.js" ></script>
 </body>
 </html>

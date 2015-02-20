@@ -1,6 +1,6 @@
 import React from 'react';
-import CategoryHeading from '../categoryHeading';
-import CategoryItemMatrix from '../categoryItemMatrix';
+import CategoryHeading from './CategoryHeading';
+import CategoryItemMatrix from './CategoryItemMatrix';
 
 var CategoryMatrixTable = React.createClass(
   {
@@ -24,7 +24,7 @@ var CategoryMatrixTable = React.createClass(
       return (
         <div>
           <CategoryHeading content={this.props.categoryName} />
-          <div className='g'>{rows}</div>
+          {rows}
         </div>
       )
     }

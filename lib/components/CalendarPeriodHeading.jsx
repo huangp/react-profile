@@ -5,8 +5,8 @@ var CalendarPeriodHeading = React.createClass(
     render: function() {
       return (
         <div>
-          <h4>{this.props.fromDate} - {this.props.toDate} ({this.props.dateRange})</h4>
-          <h5 className='heading--sub'>Select a day for more detail</h5>
+          <h3>{this.props.fromDate} - {this.props.toDate} ({this.props.dateRange})</h3>
+          <h4 className='heading--sub'>Select a day for more detail</h4>
         </div>
       )
     }

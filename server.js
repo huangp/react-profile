@@ -9,6 +9,5 @@ new WebpackDevServer(webpack(config), {
   if (err) {
     console.log(err);
   }
-
   console.log('Listening at 0.0.0.0:3000');
 });

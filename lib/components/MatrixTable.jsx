@@ -17,9 +17,9 @@ var MatrixTable = React.createClass({
       rows.push(<DayMatrix date={day} key={key} wordCount={totalWordCount} onDaySelection={matrixTable.props.onDaySelection} />);
     }));
     return (
-      <div>
+      <table className="l--push-bottom-1">
         {rows}
-      </div>
+      </table>
     );
   }
 });

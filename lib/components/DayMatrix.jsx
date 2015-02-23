@@ -12,10 +12,10 @@ var DayMatrix = React.createClass({
   },
   render: function() {
     return (
-      <div className='g l--pad-v-quarter'>
-        <span className='w--3-4 g__item l--pad-h-half' onClick={this.handleDayClick}>{this.props.date}</span>
-        <span className='w--1-4 g__item l--pad-h-half txt--align-right' >{this.props.wordCount} <span className='txt--neutral'>words</span></span>
-      </div>
+      <tr>
+        <td onClick={this.handleDayClick} className='l--pad-left-0 l--pad-v-0 w--1'>{this.props.date}</td>
+        <td className='txt--align-right l--pad-right-0 l--pad-v-0 txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>words</span></td>
+      </tr>
     );
   }
 });

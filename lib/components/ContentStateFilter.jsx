@@ -25,7 +25,7 @@ var ContentStateFilter = React.createClass({
 
     });
     return (
-      <div>{optionItems}</div>
+      <div className='l--pad-bottom-half'>{optionItems}</div>
     );
   }
 });

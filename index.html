@@ -2,7 +2,8 @@
 <html class="new-zanata">
 <head lang="en">
   <meta charset="UTF-8">
-  <link type="text/css" rel="stylesheet" href="http://assets-zanata.rhcloud.com/6/assets/css/style.css">
+  <link type="text/css" rel="stylesheet" href="http://assets-zanata.rhcloud.com/7/assets/css/style.min.css">
+  <!-- <link type="text/css" rel="stylesheet" href="http://localhost:5000/assets/css/style.css"> -->
   <title>Zanata Profile</title>
   <script type="text/javascript">
     WebFontConfig = {
@@ -20,7 +21,14 @@
   </script>
 </head>
 <body class="new-zanata zanata">
-  <div id="userMatrixRoot" data-base-url="./lib/stores/userStats.json?foo=" ></div>
+  <div class="g">
+    <div class="g__item w--1-4 w--1-2-m">
+
+    </div>
+    <div class="g__item w--3-4 w--1-2-m">
+      <div id="userMatrixRoot" data-base-url="./lib/stores/userStats.json?foo=" class="bg--highest l--pad-v-2"></div>
+    </div>
+  </div>
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" ></script>
   <script src="bundle.js" ></script>

@@ -5,6 +5,8 @@ import DropDown from './DropDown';
 import FilterableMatrixTable from './FilterableMatrixTable';
 import utilsDate from '../utils/DateHelper';
 
+/* @flow */
+
 var RecentContributions = React.createClass(
   {
     getDefaultProps: function() {
@@ -63,12 +65,14 @@ var RecentContributions = React.createClass(
 
       return (
         <div className="l__wrapper">
-          <ContributionChart matrixData={paddedData} dateRange={this.state.selectedDateRange} />
-          <div>
-            <div className="l--float-right">
+          <div className="l--push-bottom-1">
+            <div className="l--float-right txt--uppercase">
               <DropDown options={this.props.dateRangeOptions} selectedOption={this.state.selectedDateRange} onOptionSelection={this.onDateRangeSelection} />
             </div>
             <h2 className='delta txt--uppercase'>Recent Contributions</h2>
+          </div>
+          <div className="l--push-bottom-1">
+            <ContributionChart matrixData={paddedData} dateRange={this.state.selectedDateRange} />
           </div>
           <FilterableMatrixTable matrixData={this.state.data} fromDate={dateRange['fromDate']} toDate={dateRange['toDate']} dateRange={this.state.selectedDateRange} />
         </div>

@@ -2,10 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
   context: __dirname,
-  devtool: 'eval',
   entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
     './index.js',
   ],
   output: {
@@ -18,14 +15,20 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['react-hot', 'babel-loader']
+        loader: 'babel-loader'
       }
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({ "global.GENTLY": false }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("production")
+      }
+    }),
     new webpack.NoErrorsPlugin()
   ],
   resolve: {

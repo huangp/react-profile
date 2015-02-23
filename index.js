@@ -1,5 +1,5 @@
 import React from 'react';
-import RecentContributions from './lib/components/recentContributions';
+import RecentContributions from './lib/components/RecentContributions';
 
 var mountNode = document.getElementById('userMatrixRoot'),
   baseUrl;

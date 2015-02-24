@@ -15,12 +15,12 @@ var ContentStateFilter = React.createClass({
     optionItems = this.props.contentStateOptions.map(function(optionAndStyle) {
       var option = optionAndStyle[0],
           optionStyle = optionAndStyle[1],
-          buttonStyle = selected === option ? 'is-active' : optionStyle;
+          buttonStyle = selected === option ? optionStyle + ' is-active' : optionStyle;
 
       return (
-        <button key={option} onClick={clickHandler} className={buttonStyle + ' button--link l--pad-h-quarter txt--align-center'}>
+        <span key={option} onClick={clickHandler} className={buttonStyle}>
           {option}
-        </button>
+        </span>
       );
 
     });

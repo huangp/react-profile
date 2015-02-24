@@ -9,10 +9,10 @@ var FilterableMatrixTable = React.createClass({
   getDefaultProps: function() {
     return {
       contentStateOptions: [
-        ['Total', 'txt--secondary'],
-        ['Approved', 'txt--highlight'],
-        ['Translated', 'txt--success'],
-        ['Needs Work', 'txt--unsure']]
+        ['Total', 'pill pill--secondary'],
+        ['Approved', 'pill pill--highlight'],
+        ['Translated', 'pill pill--success'],
+        ['Needs Work', 'pill pill--unsure']]
     }
   },
 

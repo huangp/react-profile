@@ -109,7 +109,7 @@ var ContributionChart = React.createClass({
         datasetStrokeWidth : 2,
         datasetFill : true,
         // TODO: Need to set this to true but it breaks
-        // responsive: true,
+        responsive: true,
         showTooltips: true,
         scaleFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
         scaleFontColor: "#c6d2db",

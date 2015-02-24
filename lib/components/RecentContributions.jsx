@@ -74,7 +74,7 @@ var RecentContributions = React.createClass(
           <div className="l--push-bottom-1">
             <ContributionChart matrixData={paddedData} dateRange={this.state.selectedDateRange} />
           </div>
-          <FilterableMatrixTable matrixData={this.state.data} fromDate={dateRange['fromDate']} toDate={dateRange['toDate']} dateRange={this.state.selectedDateRange} />
+          <FilterableMatrixTable matrixData={paddedData} fromDate={dateRange['fromDate']} toDate={dateRange['toDate']} dateRange={this.state.selectedDateRange} />
         </div>
       )
     }

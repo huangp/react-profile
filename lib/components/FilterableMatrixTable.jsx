@@ -51,21 +51,29 @@ var FilterableMatrixTable = React.createClass({
 
   render: function () {
     var selectedState = this.state.selectedContentState,
-      stateMatchFunc = this.isStateMatchSelected,
-      filteredByContentStateData = _.cloneDeep(this.props.matrixData),
-      filteredByContentStateAndFlattenedData
+      filterableMatrixTable = this,
+      filteredByContentStateData = [],
+      filteredByContentStateAndFlattenedData,
+      selectedDayIndex
       ;
     if (this.state.selectedContentState !== 'Total') {
-      _.forOwn(filteredByContentStateData, function(perDayMatrix) {
-        _.remove(perDayMatrix, function(singleMatrix) {
-          return !stateMatchFunc(selectedState, singleMatrix['savedState']);
-        })
+      _.forEach(this.props.matrixData, function(perDayMatrix) {
+        if (filterableMatrixTable.isStateMatchSelected(selectedState, perDayMatrix['savedState'])) {
+          filteredByContentStateData.push(perDayMatrix);
+        }
       });
+    } else {
+      filteredByContentStateData = this.props.matrixData;
     }
     if (this.state.selectedDay) {
-      filteredByContentStateAndFlattenedData = filteredByContentStateData[this.state.selectedDay];
+      selectedDayIndex = _.findIndex(filteredByContentStateData, function(entry) {
+        return _.keys(entry)[0] == filterableMatrixTable.state.selectedDay;
+      });
+      filteredByContentStateAndFlattenedData = filteredByContentStateData[selectedDayIndex];
     } else {
-      filteredByContentStateAndFlattenedData = _.flatten(_.values(filteredByContentStateData));
+      filteredByContentStateAndFlattenedData = _.flatten(filteredByContentStateData.map(function(eachDay) {
+        return _.values(eachDay);
+      }));
     }
     return (
       <div>

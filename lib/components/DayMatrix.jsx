@@ -1,6 +1,13 @@
-import React from 'react';
+import React from 'react/addons';
 
 var DayMatrix = React.createClass({
+  propTypes: {
+    dateLabel: React.PropTypes.string.isRequired,
+    date: React.PropTypes.string.isRequired,
+    wordCount: React.PropTypes.number.isRequired,
+    onDaySelection: React.PropTypes.func.isRequired
+  },
+
   handleDayClick: function(event) {
     var dayChosen = this.props.date;
     if (this.props.selectedDay == dayChosen) {
@@ -11,8 +18,16 @@ var DayMatrix = React.createClass({
     }
   },
   render: function() {
-    var buttonClass = 'button--link';
-    buttonClass += this.props.date === this.props.selectedDay ? ' is-active' : '';
+    var cx = React.addons.classSet,
+      buttonClass;
+
+    buttonClass = cx(
+      {
+        'button--link': true,
+        'is-active': this.props.date === this.props.selectedDay
+      }
+    );
+
     return (
       <tr>
         <td className='l--pad-left-0 l--pad-v-0 w--1'>

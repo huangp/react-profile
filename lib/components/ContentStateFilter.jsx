@@ -1,10 +1,9 @@
 import React from 'react';
 
 var ContentStateFilter = React.createClass({
-  onFilterOptionClicked: function(event) {
-    var optionInnerText = event.target.innerText;
-    if (this.props.selectedContentState !== optionInnerText) {
-      this.props.onContentStateSelection(optionInnerText);
+  onFilterOptionClicked: function(option, event) {
+    if (this.props.selectedContentState !== option) {
+      this.props.onContentStateSelection(option);
     }
   },
   render: function() {
@@ -18,7 +17,7 @@ var ContentStateFilter = React.createClass({
           buttonStyle = selected === option ? optionStyle + ' is-active' : optionStyle;
 
       return (
-        <span key={option} onClick={clickHandler} className={buttonStyle}>
+        <span key={option} onClick={clickHandler.bind(this, option)} className={buttonStyle}>
           {option}
         </span>
       );

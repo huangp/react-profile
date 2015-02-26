@@ -4,6 +4,7 @@ import ContributionChart from './ContributionChart';
 import DropDown from './DropDown';
 import FilterableMatrixTable from './FilterableMatrixTable';
 import utilsDate from '../utils/DateHelper';
+import dataFilter from '../utils/DataFilters';
 
 /* @flow */
 
@@ -18,7 +19,7 @@ var RecentContributions = React.createClass(
     getInitialState: function() {
       return {
         selectedDateRange: 'This Week',
-        data: {}
+        data: []
       }
     },
 
@@ -47,21 +48,17 @@ var RecentContributions = React.createClass(
     },
 
     onDateRangeSelection: function(dateRange) {
+      console.log('date range selected');
       this.loadFromServer(dateRange);
     },
 
     render: function() {
-      var dataInState = this.state.data,
-        dateRange = utilsDate.getDateRangeFromOption(this.state.selectedDateRange),
-        paddedData = [],
-        datesOfThisWeek = dateRange['dates'];
+      var dateRange = utilsDate.getDateRangeFromOption(this.state.selectedDateRange),
+        totalWordCountsForEachDay;
 
-      // fill in dates where there is no data in it
-      datesOfThisWeek.forEach(function(date) {
-        var entry = {};
-        entry[date] = dataInState[date] || [];
-        paddedData.push(entry);
-      });
+      totalWordCountsForEachDay = dataFilter.transformToTotalWordCountsForEachDay(
+        this.state.data,
+        dateRange);
 
       return (
         <div className="l__wrapper">
@@ -72,9 +69,9 @@ var RecentContributions = React.createClass(
             <h2 className='delta txt--uppercase'>Recent Contributions</h2>
           </div>
           <div className="l--push-bottom-1">
-            <ContributionChart matrixData={paddedData} dateRange={this.state.selectedDateRange} />
+            <ContributionChart wordCountForEachDay={totalWordCountsForEachDay} dateRange={this.state.selectedDateRange} />
           </div>
-          <FilterableMatrixTable matrixData={paddedData} fromDate={dateRange['fromDate']} toDate={dateRange['toDate']} dateRange={this.state.selectedDateRange} />
+          <FilterableMatrixTable serverData={this.state.data} wordCountForEachDay={totalWordCountsForEachDay} fromDate={dateRange['fromDate']} toDate={dateRange['toDate']} dateRange={this.state.selectedDateRange} />
         </div>
       )
     }

@@ -1,34 +1,42 @@
-{
-  "2015-02-09": [
-    {
-      "projectSlug": "properties-test",
-      "versionSlug": "master",
-      "localeId": "fr",
-      "savedState": "Translated",
-      "wordCount": 8
-    },
-    {
-      "projectSlug": "properties-test",
-      "versionSlug": "master",
-      "localeId": "fr",
-      "savedState": "NeedReview",
-      "wordCount": 6
-    }
-  ],
-  "2015-02-10": [
-    {
-      "projectSlug": "properties-test",
-      "versionSlug": "master",
-      "localeId": "fr",
-      "savedState": "Translated",
-      "wordCount": 14
-    },
-    {
-      "projectSlug": "properties-test",
-      "versionSlug": "master",
-      "localeId": "es",
-      "savedState": "NeedReview",
-      "wordCount": 7
-    }
-  ]
-}
+[
+  {
+    "savedDate": "2015-02-16",
+    "projectSlug": "gcc",
+    "projectName": "gcc",
+    "versionSlug": "master",
+    "localeId": "zh",
+    "localeDisplayName": "Chinese",
+    "savedState": "Translated",
+    "wordCount": 22
+  },
+  {
+    "savedDate": "2015-02-16",
+    "projectSlug": "gcc",
+    "projectName": "gcc",
+    "versionSlug": "master",
+    "localeId": "zh",
+    "localeDisplayName": "Chinese",
+    "savedState": "NeedReview",
+    "wordCount": 13
+  },
+  {
+    "savedDate": "2015-02-18",
+    "projectSlug": "about-fedora",
+    "projectName": "about fedora",
+    "versionSlug": "beta",
+    "localeId": "ja",
+    "localeDisplayName": "Japanese",
+    "savedState": "NeedReview",
+    "wordCount": 71
+  },
+  {
+    "savedDate": "2015-02-18",
+    "projectSlug": "about-fedora",
+    "projectName": "about fedora",
+    "versionSlug": "beta",
+    "localeId": "ja",
+    "localeDisplayName": "Japanese",
+    "savedState": "Translated",
+    "wordCount": 2
+  }
+]

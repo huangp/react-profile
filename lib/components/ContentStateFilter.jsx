@@ -8,9 +8,9 @@ var ContentStateFilter = React.createClass({
     }
   },
   render: function() {
-    var optionItems = [],
-      selected = this.props.selectedContentState,
-      clickHandler = this.onFilterOptionClicked;
+    var selected = this.props.selectedContentState,
+      clickHandler = this.onFilterOptionClicked,
+      optionItems;
 
     optionItems = this.props.contentStateOptions.map(function(optionAndStyle) {
       var option = optionAndStyle[0],

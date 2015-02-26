@@ -4,6 +4,7 @@ import ContentStateFilter from './ContentStateFilter';
 import MatrixTable from './MatrixTable';
 import CalendarPeriodHeading from './CalendarPeriodHeading';
 import CategoryMatrixTable from './CategoryMatrixTable';
+import dataFilter from '../utils/DataFilters'
 
 var FilterableMatrixTable = React.createClass({
   getDefaultProps: function() {
@@ -23,18 +24,6 @@ var FilterableMatrixTable = React.createClass({
     }
   },
 
-  isStateMatchSelected: function(selectedOption, savedState) {
-    if (selectedOption === 'Total') {
-      return true;
-    } else if (selectedOption === 'Needs Work') {
-      // crazy terminology mess
-      return savedState === 'NeedReview';
-    } else {
-      return savedState === selectedOption;
-    }
-
-  },
-
   onDaySelection: function(day) {
     var newState = React.addons.update(this.state, {
       selectedDay: {$set: day}
@@ -50,38 +39,30 @@ var FilterableMatrixTable = React.createClass({
   },
 
   render: function () {
-    var selectedState = this.state.selectedContentState,
-      filterableMatrixTable = this,
-      filteredByContentStateData = [],
-      filteredByContentStateAndFlattenedData,
-      selectedDayIndex
-      ;
-    if (this.state.selectedContentState !== 'Total') {
-      _.forEach(this.props.matrixData, function(perDayMatrix) {
-        if (filterableMatrixTable.isStateMatchSelected(selectedState, perDayMatrix['savedState'])) {
-          filteredByContentStateData.push(perDayMatrix);
-        }
-      });
+    var selectedContentState = this.state.selectedContentState,
+      categoryTables,
+      dataFilteredByContentState,
+      dataFilteredByContentStateAndDay;
+
+    dataFilteredByContentState = dataFilter.mapTotalWordCountByContentState(this.props.wordCountForEachDay, selectedContentState);
+
+    dataFilteredByContentStateAndDay = dataFilter.filterByContentStateAndDay(this.props.serverData, selectedContentState, this.state.selectedDay);
+
+    if (dataFilteredByContentStateAndDay.length > 0) {
+      categoryTables =
+        [
+          <CategoryMatrixTable key='locales' matrixData={dataFilteredByContentStateAndDay} category='localeId' categoryTitle='localeDisplayName' categoryName='Languages' />,
+          <CategoryMatrixTable key='projects' matrixData={dataFilteredByContentStateAndDay} category='projectSlug' categoryTitle='projectName' categoryName='Projects' />
+        ];
     } else {
-      filteredByContentStateData = this.props.matrixData;
-    }
-    if (this.state.selectedDay) {
-      selectedDayIndex = _.findIndex(filteredByContentStateData, function(entry) {
-        return _.keys(entry)[0] == filterableMatrixTable.state.selectedDay;
-      });
-      filteredByContentStateAndFlattenedData = filteredByContentStateData[selectedDayIndex];
-    } else {
-      filteredByContentStateAndFlattenedData = _.flatten(filteredByContentStateData.map(function(eachDay) {
-        return _.values(eachDay);
-      }));
+      categoryTables = <div>No translation was done</div>
     }
     return (
       <div>
-        <ContentStateFilter {...this.props} selectedContentState={this.state.selectedContentState} onContentStateSelection={this.onContentStateSelection} />
-        <MatrixTable matrixData={filteredByContentStateData} onDaySelection={this.onDaySelection} dateRange={this.props.dateRange} />
-        <CalendarPeriodHeading fromDate={this.props.fromDate} toDate={this.props.toDate} dateRange={this.props.dateRange}/>
-        <CategoryMatrixTable matrixData={filteredByContentStateAndFlattenedData} category='localeId' categoryName='Languages' />
-        <CategoryMatrixTable matrixData={filteredByContentStateAndFlattenedData} category='projectSlug' categoryName='Projects' />
+        <ContentStateFilter selectedContentState={selectedContentState} onContentStateSelection={this.onContentStateSelection} {...this.props}  />
+        <MatrixTable matrixData={dataFilteredByContentState} onDaySelection={this.onDaySelection} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay} />
+        <CalendarPeriodHeading fromDate={this.props.fromDate} toDate={this.props.toDate} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay}/>
+        {categoryTables}
       </div>
     )
   }

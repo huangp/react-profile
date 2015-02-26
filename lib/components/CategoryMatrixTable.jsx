@@ -7,19 +7,24 @@ var CategoryMatrixTable = React.createClass(
       var categoryMatrix = {},
           rows = [],
           // TODO validate category is one of the key in matrix object
-          categoryField = this.props.category;
+          categoryField = this.props.category,
+          categoryFieldTitle = this.props.categoryTitle
+        ;
 
       this.props.matrixData.forEach(function(matrix) {
         var field = matrix[categoryField];
-        if (categoryMatrix[field]) {
-          categoryMatrix[field] += matrix['wordCount'];
+        if (categoryMatrix[field] && categoryMatrix[field]['wordCount']) {
+          categoryMatrix[field]['wordCount'] += matrix['wordCount'];
         } else {
-          categoryMatrix[field] = matrix['wordCount'];
+          categoryMatrix[field] = {
+            wordCount: matrix['wordCount'],
+            title: matrix[categoryFieldTitle]
+          };
         }
       });
 
       _.forOwn(categoryMatrix, function(value, key) {
-        rows.push(<CategoryItemMatrix key={key} itemName={key} wordCount={value} />)
+        rows.push(<CategoryItemMatrix key={key} itemName={key} itemTitle={value['title']} wordCount={value['wordCount']} />)
       });
 
       return (

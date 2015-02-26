@@ -2,36 +2,7 @@ import React from 'react';
 import utilsDate from '../utils/DateHelper';
 var LineChart = require('react-chartjs').Line;
 
-function getTotalWordCountsForDay (matrixArray) {
-  // TODO should do some precondition check
-  var totalApproved = 0,
-    totalTranslated = 0,
-    totalNeedsWork = 0;
-
-  matrixArray.forEach(function(matrix) {
-    switch(matrix['savedState']) {
-      case 'Approved':
-        totalApproved += matrix['wordCount'];
-        break;
-      case 'Translated':
-        totalTranslated += matrix['wordCount'];
-        break;
-      case 'NeedReview':
-        totalNeedsWork += matrix['wordCount'];
-        break;
-      default:
-        throw new Error('unrecognized state:' + matrix['savedState']);
-    }
-  });
-  return {
-    totalApproved: totalApproved,
-    totalTranslated: totalTranslated,
-    totalNeedsWork: totalNeedsWork,
-    totalActivity: totalApproved + totalTranslated + totalNeedsWork
-  }
-};
-
-function convertMatrixDataToChartData (matrixData, dateRangeOption) {
+function convertMatrixDataToChartData(matrixData) {
   var chartData = {
     labels: [],
     datasets: [
@@ -76,20 +47,16 @@ function convertMatrixDataToChartData (matrixData, dateRangeOption) {
         data: []
       }
     ]
-  };
+  },
+    numOfDays = matrixData.length;
 
   matrixData.forEach(function(value) {
-    var date = _.keys(value)[0],
-      total;
+    chartData.labels.push(utilsDate.dayAsLabel(value['date'], numOfDays));
 
-    chartData.labels.push(utilsDate.dayAsLabel(date, dateRangeOption));
-
-    total = getTotalWordCountsForDay(value[date]);
-
-    chartData['datasets'][0]['data'].push(total['totalActivity']);
-    chartData['datasets'][1]['data'].push(total['totalTranslated']);
-    chartData['datasets'][2]['data'].push(total['totalNeedsWork']);
-    chartData['datasets'][3]['data'].push(total['totalApproved']);
+    chartData['datasets'][0]['data'].push(value['totalActivity']);
+    chartData['datasets'][1]['data'].push(value['totalTranslated']);
+    chartData['datasets'][2]['data'].push(value['totalNeedsWork']);
+    chartData['datasets'][3]['data'].push(value['totalApproved']);
   });
 
   return chartData;
@@ -137,9 +104,9 @@ var ContributionChart = React.createClass({
     }
   },
   render: function() {
-    var chartData = convertMatrixDataToChartData(this.props.matrixData, this.props.dateRange);
+    var chartData = convertMatrixDataToChartData(this.props.wordCountForEachDay);
     return (
-      <LineChart data={chartData} options={this.props.chartOptions} width="800" height="300"/>
+      <LineChart data={chartData} width="800" height="300"/>
     )
   }
 });

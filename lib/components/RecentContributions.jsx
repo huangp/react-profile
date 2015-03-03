@@ -48,7 +48,6 @@ var RecentContributions = React.createClass(
     },
 
     onDateRangeSelection: function(dateRange) {
-      console.log('date range selected');
       this.loadFromServer(dateRange);
     },
 

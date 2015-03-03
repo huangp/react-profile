@@ -7,7 +7,8 @@ var ContentStateFilter = React.createClass({
     }
   },
   render: function() {
-    var selected = this.props.selectedContentState,
+    var contentStateFilter= this,
+      selected = this.props.selectedContentState,
       clickHandler = this.onFilterOptionClicked,
       optionItems;
 
@@ -17,7 +18,7 @@ var ContentStateFilter = React.createClass({
           buttonStyle = selected === option ? optionStyle + ' is-active' : optionStyle;
 
       return (
-        <span key={option} onClick={clickHandler.bind(this, option)} className={buttonStyle}>
+        <span key={option} onClick={ clickHandler.bind(contentStateFilter, option) } className={buttonStyle}>
           {option}
         </span>
       );

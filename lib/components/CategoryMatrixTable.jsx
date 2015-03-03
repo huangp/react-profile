@@ -31,7 +31,9 @@ var CategoryMatrixTable = React.createClass(
         <div>
           <h3 className='zeta txt--uppercase txt--understated'>{this.props.categoryName}</h3>
           <table className='l--push-bottom-half'>
+            <tbody>
             {rows}
+            </tbody>
           </table>
         </div>
       );

@@ -1,5 +1,6 @@
 node_modules/
 bower_dependencies/
 bower_components/
+bundle.min.js*
 bundle.js*
 build/

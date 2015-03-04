@@ -18,7 +18,7 @@ var MatrixTable = React.createClass({
       detailsClass;
 
     clearClass = matrixTable.props.selectedDay ? '' : 'is-hidden' ;
-    detailsClass = !matrixTable.props.selectedDay ? '' : 'is-hidden' ;
+    detailsClass = !matrixTable.props.selectedDay ? 'txt--understated' : 'is-hidden' ;
 
     // TODO switch to calendar view for month so that we don't need to hide 0 matrices
     if (numOfDays > 7) {
@@ -34,7 +34,7 @@ var MatrixTable = React.createClass({
 
     return (
       <div>
-        <h3 className="epsilon">Daily Activity</h3>
+        <h3 className="epsilon txt--uppercase">Daily Activity</h3>
         <p className={clearClass}><button className="button--link" onClick={this.handleClearSelection}>Clear selection</button></p>
         <p className={detailsClass}>Select a day below for more detail</p>
         <div className="l--push-bottom-1">

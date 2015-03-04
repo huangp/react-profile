@@ -20,7 +20,7 @@ var CalendarPeriodHeading = React.createClass(
       }
       return (
         <div className='l--push-bottom-half'>
-          <h3 className='epsilon'>Activity Details</h3>
+          <h3 className='epsilon txt--uppercase'>Activity Details</h3>
           <p className="txt--understated">{period}</p>
         </div>
       )

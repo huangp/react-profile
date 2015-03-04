@@ -6,8 +6,6 @@ import FilterableMatrixTable from './FilterableMatrixTable';
 import utilsDate from '../utils/DateHelper';
 import dataFilter from '../utils/DataFilters';
 
-/* @flow */
-
 var RecentContributions = React.createClass(
   {
     getDefaultProps: function() {

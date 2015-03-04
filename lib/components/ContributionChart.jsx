@@ -1,6 +1,8 @@
 import React from 'react';
 import utilsDate from '../utils/DateHelper';
-var LineChart = require('react-chartjs').Line;
+import { Line } from 'react-chartjs';
+
+var LineChart = Line;
 
 function convertMatrixDataToChartData(matrixData) {
   var chartData = {

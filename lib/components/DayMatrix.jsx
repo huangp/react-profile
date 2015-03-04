@@ -33,10 +33,10 @@ var DayMatrix = React.createClass({
       <li onClick={this.handleDayClick}>
         <div className={rowClass}>
           <div className="g g--collapsed">
-            <div className='g__item w--1-2 w--1-2-s txt--align-left'>
+            <div className='g__item w--1-2 w--1-2-s txt--align-left txt--align-left-s'>
               {this.props.dateLabel}
             </div>
-            <div className='g__item w--1-2 w--1-2-s txt--align-right txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>words</span></div>
+            <div className='g__item w--1-2 w--1-2-s txt--align-right txt--align-right-s txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>words</span></div>
           </div>
         </div>
       </li>

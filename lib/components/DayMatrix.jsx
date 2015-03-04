@@ -8,6 +8,12 @@ var DayMatrix = React.createClass({
     onDaySelection: React.PropTypes.func.isRequired
   },
 
+  getDefaultProps: function() {
+    return {
+      showWords: true
+    }
+  },
+
   handleDayClick: function(event) {
     var dayChosen = this.props.date;
     if (this.props.selectedDay == dayChosen) {
@@ -17,29 +23,35 @@ var DayMatrix = React.createClass({
       this.props.onDaySelection(dayChosen);
     }
   },
+
   render: function() {
     var cx = React.addons.classSet,
+      wordsDesc = '',
+      selectedContentState = this.props.selectedContentState,
       rowClass;
 
-    rowClass = cx(
-      {
-        'pill': true,
-        'pill--secondary': true,
-        'is-active': this.props.date === this.props.selectedDay
-      }
-    );
+    rowClass = {
+      'pill': true,
+      'is-active': this.props.date === this.props.selectedDay
+    };
+    this.props.contentStateOptions.forEach(function(optionAndStyle) {
+      rowClass[optionAndStyle[1]] = selectedContentState === optionAndStyle[0];
+    });
+
+    // TODO this is dodgy. Should use responsive design to show/hide this portion
+    if (this.props.showWords) {
+      wordsDesc = ' words';
+    }
 
     return (
-      <li onClick={this.handleDayClick}>
-        <div className={rowClass}>
-          <div className="g g--collapsed">
-            <div className='g__item w--1-2 w--1-2-s txt--align-left txt--align-left-s'>
-              {this.props.dateLabel}
-            </div>
-            <div className='g__item w--1-2 w--1-2-s txt--align-right txt--align-right-s txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>words</span></div>
+      <div className={cx(rowClass)} onClick={this.handleDayClick}>
+        <div className="g g--collapsed">
+          <div className='g__item w--1-2 w--1-2-s txt--align-left txt--align-left-s'>
+            {this.props.dateLabel}
           </div>
+          <div className='g__item w--1-2 w--1-2-s txt--align-right txt--align-right-s txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>{wordsDesc}</span></div>
         </div>
-      </li>
+      </div>
     );
   }
 });

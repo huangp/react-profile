@@ -5,7 +5,6 @@ import utilsDate from '../utils/DateHelper';
 
 var MatrixTable = React.createClass({
   handleClearSelection: function(event) {
-    console.log('clear');
     this.props.onDaySelection(null);
   },
 
@@ -29,7 +28,10 @@ var MatrixTable = React.createClass({
 
     rows = matrixData.map(function(entry) {
       var label = utilsDate.dayAsLabel(entry['date'], numOfDays, true);
-      return (<DayMatrix dateLabel={label} key={entry['date']} date={entry['date']} wordCount={entry['wordCount']} onDaySelection={matrixTable.props.onDaySelection} selectedDay={matrixTable.props.selectedDay} />);
+      return (
+        <li key={entry['date']}>
+          <DayMatrix dateLabel={label} date={entry['date']} wordCount={entry['wordCount']} {...matrixTable.props} />
+        </li>);
     });
 
     return (

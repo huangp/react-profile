@@ -2,6 +2,7 @@ import React from 'react/addons';
 import _ from 'lodash';
 import ContentStateFilter from './ContentStateFilter';
 import MatrixTable from './MatrixTable';
+import CalendarMonthMatrix from './CalendarMonthMatrix'
 import CalendarPeriodHeading from './CalendarPeriodHeading';
 import CategoryMatrixTable from './CategoryMatrixTable';
 import dataFilter from '../utils/DataFilters'
@@ -62,7 +63,8 @@ var FilterableMatrixTable = React.createClass({
         <ContentStateFilter selectedContentState={selectedContentState} onContentStateSelection={this.onContentStateSelection} {...this.props}  />
         <div className="g">
           <div className="g__item w--1-2-l w--1-2-h">
-            <MatrixTable matrixData={dataFilteredByContentState} onDaySelection={this.onDaySelection} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay} />
+            <MatrixTable matrixData={dataFilteredByContentState} onDaySelection={this.onDaySelection} selectedDay={this.state.selectedDay} selectedContentState={this.state.selectedContentState} {...this.props}/>
+            <CalendarMonthMatrix matrixData={dataFilteredByContentState} onDaySelection={this.onDaySelection} selectedDay={this.state.selectedDay} selectedContentState={this.state.selectedContentState} {...this.props} />
           </div>
           <div className="g__item w--1-2-l w--1-2-h">
             <CalendarPeriodHeading fromDate={this.props.fromDate} toDate={this.props.toDate} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay}/>

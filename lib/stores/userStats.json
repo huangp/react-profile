@@ -38,5 +38,35 @@
     "localeDisplayName": "Japanese",
     "savedState": "Translated",
     "wordCount": 2
+  },
+  {
+    "savedDate": "2015-03-02",
+    "projectSlug": "zanata-server",
+    "projectName": "Zanata Server",
+    "versionSlug": "master",
+    "localeId": "zh",
+    "localeDisplayName": "Chinese",
+    "savedState": "Translated",
+    "wordCount": 354
+  },
+  {
+    "savedDate": "2015-03-02",
+    "projectSlug": "zanata-server",
+    "projectName": "Zanata Server",
+    "versionSlug": "master",
+    "localeId": "zh",
+    "localeDisplayName": "Chinese",
+    "savedState": "NeedReview",
+    "wordCount": 24
+  },
+  {
+    "savedDate": "2015-03-03",
+    "projectSlug": "zanata-server",
+    "projectName": "Zanata Server",
+    "versionSlug": "master",
+    "localeId": "zh",
+    "localeDisplayName": "Japanese",
+    "savedState": "Translated",
+    "wordCount": 251
   }
 ]

@@ -6,21 +6,22 @@ var CalendarPeriodHeading = React.createClass(
   {
     render: function() {
       var stdFmt = dateUtils['dateFormat'],
-        dateDisplayFmt = 'DD MMM, YYYY',
+        dateDisplayFmt = 'DD MMM, YYYY (dddd)',
+        dateRangeDisplayFmt = 'DD MMM, YYYY',
         period;
 
       if (this.props.selectedDay) {
         period = moment(this.props.selectedDay, stdFmt).format(dateDisplayFmt);
       } else {
-        period = moment(this.props.fromDate, stdFmt).format(dateDisplayFmt)
-        + ' .. '
-        + moment(this.props.toDate, stdFmt).format(dateDisplayFmt)
+        period = moment(this.props.fromDate, stdFmt).format(dateRangeDisplayFmt)
+        + ' … '
+        + moment(this.props.toDate, stdFmt).format(dateRangeDisplayFmt)
         + '(' + this.props.dateRange + ')';
       }
       return (
         <div className='l--push-bottom-half'>
-          <h3 className='epsilon'>{period}</h3>
-          <h4 className='zeta heading--sub'>Select a day for more detail</h4>
+          <h3 className='epsilon'>Activity Details</h3>
+          <p className="txt--understated">{period}</p>
         </div>
       )
     }

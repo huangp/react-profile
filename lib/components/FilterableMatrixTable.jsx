@@ -10,10 +10,10 @@ var FilterableMatrixTable = React.createClass({
   getDefaultProps: function() {
     return {
       contentStateOptions: [
-        ['Total', 'pill pill--secondary'],
-        ['Approved', 'pill pill--highlight'],
-        ['Translated', 'pill pill--success'],
-        ['Needs Work', 'pill pill--unsure']]
+        ['Total', 'pill--secondary'],
+        ['Approved', 'pill--highlight'],
+        ['Translated', 'pill--success'],
+        ['Needs Work', 'pill--unsure']]
     }
   },
 
@@ -60,9 +60,15 @@ var FilterableMatrixTable = React.createClass({
     return (
       <div>
         <ContentStateFilter selectedContentState={selectedContentState} onContentStateSelection={this.onContentStateSelection} {...this.props}  />
-        <MatrixTable matrixData={dataFilteredByContentState} onDaySelection={this.onDaySelection} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay} />
-        <CalendarPeriodHeading fromDate={this.props.fromDate} toDate={this.props.toDate} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay}/>
-        {categoryTables}
+        <div className="g">
+          <div className="g__item w--1-2-l w--1-2-h">
+            <MatrixTable matrixData={dataFilteredByContentState} onDaySelection={this.onDaySelection} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay} />
+          </div>
+          <div className="g__item w--1-2-l w--1-2-h">
+            <CalendarPeriodHeading fromDate={this.props.fromDate} toDate={this.props.toDate} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay}/>
+            {categoryTables}
+          </div>
+        </div>
       </div>
     )
   }

@@ -15,7 +15,8 @@ var ContentStateFilter = React.createClass({
     optionItems = this.props.contentStateOptions.map(function(optionAndStyle) {
       var option = optionAndStyle[0],
           optionStyle = optionAndStyle[1],
-          buttonStyle = selected === option ? optionStyle + ' is-active' : optionStyle;
+          buttonStyle = 'pill pill--inline '
+          buttonStyle += selected === option ? optionStyle + ' is-active' : optionStyle;
 
       return (
         <span key={option} onClick={ clickHandler.bind(contentStateFilter, option) } className={buttonStyle}>

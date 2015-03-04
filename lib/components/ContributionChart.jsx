@@ -80,7 +80,7 @@ var ContributionChart = React.createClass({
         showTooltips: true,
         scaleFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
         scaleFontColor: "#c6d2db",
-        scaleShowGridLines : true,
+        scaleShowGridLines : false,
         scaleGridLineColor : "rgba(198, 210, 219, .2)",
         tooltipFillColor: "rgba(255,255,255,0.8)",
         // String - Tooltip label font declaration for the scale label
@@ -106,7 +106,7 @@ var ContributionChart = React.createClass({
   render: function() {
     var chartData = convertMatrixDataToChartData(this.props.wordCountForEachDay);
     return (
-      <LineChart data={chartData} width="800" height="300"/>
+      <LineChart data={chartData} width="800" height="250"/>
     )
   }
 });

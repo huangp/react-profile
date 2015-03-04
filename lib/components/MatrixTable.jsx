@@ -4,11 +4,21 @@ import DayMatrix from './DayMatrix';
 import utilsDate from '../utils/DateHelper';
 
 var MatrixTable = React.createClass({
+  handleClearSelection: function(event) {
+    console.log('clear');
+    this.props.onDaySelection(null);
+  },
+
   render: function() {
     var matrixTable = this,
       numOfDays = this.props.matrixData.length,
       matrixData = this.props.matrixData,
-      rows;
+      rows,
+      clearClass,
+      detailsClass;
+
+    clearClass = matrixTable.props.selectedDay ? '' : 'is-hidden' ;
+    detailsClass = !matrixTable.props.selectedDay ? '' : 'is-hidden' ;
 
     // TODO switch to calendar view for month so that we don't need to hide 0 matrices
     if (numOfDays > 7) {
@@ -23,9 +33,14 @@ var MatrixTable = React.createClass({
     });
 
     return (
-      <table className="l--push-bottom-1">
-        <tbody>{rows}</tbody>
-      </table>
+      <div>
+        <h3 className="epsilon">Daily Activity</h3>
+        <p className={clearClass}><button className="button--link" onClick={this.handleClearSelection}>Clear selection</button></p>
+        <p className={detailsClass}>Select a day below for more detail</p>
+        <div className="l--push-bottom-1">
+          <ul className="list--no-bullets">{rows}</ul>
+        </div>
+      </div>
     );
   }
 });

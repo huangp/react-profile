@@ -19,22 +19,27 @@ var DayMatrix = React.createClass({
   },
   render: function() {
     var cx = React.addons.classSet,
-      buttonClass;
+      rowClass;
 
-    buttonClass = cx(
+    rowClass = cx(
       {
-        'button--link': true,
+        'pill': true,
+        'pill--secondary': true,
         'is-active': this.props.date === this.props.selectedDay
       }
     );
 
     return (
-      <tr>
-        <td className='l--pad-left-0 l--pad-v-0 w--1'>
-          <button className={buttonClass} onClick={this.handleDayClick}>{this.props.dateLabel}</button>
-        </td>
-        <td className='txt--align-right l--pad-right-0 l--pad-v-0 txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>words</span></td>
-      </tr>
+      <li onClick={this.handleDayClick}>
+        <div className={rowClass}>
+          <div className="g g--collapsed">
+            <div className='g__item w--1-2 w--1-2-s txt--align-left'>
+              {this.props.dateLabel}
+            </div>
+            <div className='g__item w--1-2 w--1-2-s txt--align-right txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>words</span></div>
+          </div>
+        </div>
+      </li>
     );
   }
 });

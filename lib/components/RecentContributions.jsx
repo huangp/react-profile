@@ -29,19 +29,27 @@ var RecentContributions = React.createClass(
       var dateRange = utilsDate.getDateRangeFromOption(dateRangeOption),
         url = this.props.baseUrl + dateRange.fromDate + '..' + dateRange.toDate;
 
-      // console.info('about to load from server: %s..%s', dateRange.fromDate, dateRange.toDate);
+      // console.info('about to load from server: %s..%s', dateRange.fromDate,
+      // dateRange.toDate);
 
-      Request.get(url).end((function (res) {
-        if (res.ok) {
-          this.setState(
-            {
-              data: res['body'],
-              selectedDateRange: dateRangeOption
-            }
-          );
-        } else {
-          console.error(url, res.status, res.error.toString());
-        }
+      // we turn off cache because it seems like if server(maybe just node?)
+      // returns 304 unmodified, it won't even reach the callback!
+      Request.get(url)
+        .set("Cache-Control", "no-cache, no-store, must-revalidate")
+        .set("Pragma", "no-cache")
+        .set("Expires", 0)
+        .end((function (res) {
+          if (res.error) {
+            console.error(url, res.status, res.error.toString());
+          } else {
+            console.log('setting state from new response:' + res['body']);
+            this.setState(
+              {
+                data: res['body'],
+                selectedDateRange: dateRangeOption
+              }
+            );
+          }
       }).bind(this))
     },
 

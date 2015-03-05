@@ -32,7 +32,8 @@ var DayMatrix = React.createClass({
 
     rowClass = {
       'pill': true,
-      'is-active': this.props.date === this.props.selectedDay
+      'is-active': this.props.date === this.props.selectedDay,
+      'txt--neutral' : this.props.wordCount == 0
     };
     this.props.contentStateOptions.forEach(function(optionAndStyle) {
       rowClass[optionAndStyle[1]] = selectedContentState === optionAndStyle[0];
@@ -46,10 +47,10 @@ var DayMatrix = React.createClass({
     return (
       <div className={cx(rowClass)} onClick={this.handleDayClick}>
         <div className="g g--collapsed">
-          <div className='g__item w--1-2 w--1-2-s txt--align-left txt--align-left-s'>
+          <div className='g__item txt--align-left txt--align-left-s'>
             {this.props.dateLabel}
           </div>
-          <div className='g__item w--1-2 w--1-2-s txt--align-right txt--align-right-s txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>{wordsDesc}</span></div>
+          <div className='g__item txt--align-right txt--align-right-s txt--nowrap' >{this.props.wordCount} <span className='txt--understated'>{wordsDesc}</span></div>
         </div>
       </div>
     );

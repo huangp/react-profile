@@ -6,6 +6,7 @@ import utilsDate from '../utils/DateHelper';
 
 var CalendarMonthMatrix = React.createClass({
   getDefaultProps: function() {
+    // this is to make week days locale aware and making sure it align with below display
     var now = moment(),
       weekDays = [];
     for (var i = 0; i < 7; i++) {
@@ -41,6 +42,7 @@ var CalendarMonthMatrix = React.createClass({
         // for the first week, we pre-fill missing week days
         dayColumns.push(<td key={firstDay.weekday(dayTracker).format()}></td>);
       } else {
+
         dayColumns.push(
           <td key={date}>
             <DayMatrix dateLabel={moment(date).format('Do')} date={date} wordCount={entry['wordCount']} showWords={false} {...calendarMonthMatrix.props} />
@@ -56,13 +58,14 @@ var CalendarMonthMatrix = React.createClass({
     });
 
     result = weekRows.map(function(entry, index) {
+      var key = calendarMonthMatrix.props.dateRange + '-week' + index;
       return (
-        <tr key={calendarMonthMatrix.props.dateRange + '-week' + index}> {entry} </tr>
+        <tr key={key}> {entry} </tr>
       );
     });
 
     heading = (
-      <td colSpan="7">{firstDay.format('MMMM')}</td>
+      <td colSpan="7" className='txt--align-center message--highlight'><span className='txt--uppercase'>{firstDay.format('MMMM')}</span> (unit: words)</td>
     );
 
     return (

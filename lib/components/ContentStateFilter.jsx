@@ -23,7 +23,7 @@ var ContentStateFilter = React.createClass({
       optionItems;
 
     optionItems = ContentStates.map(function(option, index) {
-      var optionStyle = ContentStateStyles[index],
+      var optionStyle = 'pill--' + ContentStateStyles[index],
           buttonStyle = 'pill pill--inline ';
           buttonStyle += selected === option ? optionStyle + ' is-active' : optionStyle;
 

@@ -29,23 +29,21 @@ var DayMatrix = React.createClass({
       rowClass;
 
     rowClass = {
-      'pill': true,
+      'cal__day': true,
+      // Add this for days that are in the future
+      // 'is-disabled': true,
       'is-active': this.props.date === this.props.selectedDay,
-      'txt--neutral' : this.props.wordCount == 0
     };
+
     ContentStates.forEach(function(option, index) {
       rowClass[ContentStateStyles[index]] = selectedContentState === option;
     });
 
     return (
-      <div className={cx(rowClass)} onClick={this.handleDayClick}>
-        <div className="g g--collapsed">
-          <div className='g__item txt--align-left txt--align-left-s'>
-            {this.props.dateLabel}
-          </div>
-          <div className='g__item txt--align-right txt--align-right-s txt--nowrap' >{this.props.wordCount}</div>
-        </div>
-      </div>
+      <td className={cx(rowClass)} onClick={this.handleDayClick}>
+        <div className="cal__date">{this.props.dateLabel}</div>
+        <div className="cal__date-info" title="{this.props.wordCount} words">{this.props.wordCount}</div>
+      </td>
     );
   }
 });

@@ -26,7 +26,7 @@ var CalendarMonthMatrix = React.createClass({
       weekDay;
     for (var i = 0; i < 7; i++) {
       weekDay = now.weekday(i).format('ddd');
-      weekDays.push(<th key={weekDay}>{weekDay}</th>);
+      weekDays.push(<th className="cal__heading" key={weekDay}>{weekDay}</th>);
     }
     return {
       weekDays: weekDays
@@ -39,15 +39,17 @@ var CalendarMonthMatrix = React.createClass({
 
   render: function() {
     var calendarMonthMatrix = this,
+      cx = React.addons.classSet,
       matrixData = this.props.matrixData,
       weekRows = [],
       dayTracker = 0,
       firstDay, firstDayWeekDay,
       dayColumns,
+      tableClasses,
       heading,
       result,
-      clearClass
-      ;
+      clearClass;
+
     if (matrixData.length == 0) {
       return <table><tr><td>Loading</td></tr></table>
     }
@@ -64,13 +66,10 @@ var CalendarMonthMatrix = React.createClass({
       }
       if (weekRows.length == 0 && dayTracker < firstDayWeekDay) {
         // for the first week, we pre-fill missing week days
-        dayColumns.push(<td key={firstDay.weekday(dayTracker).format()}></td>);
+        dayColumns.push(<td className="cal__day" key={firstDay.weekday(dayTracker).format()}></td>);
       } else {
-
         dayColumns.push(
-          <td key={date}>
-            <DayMatrix dateLabel={moment(date).format('Do')} date={date} wordCount={entry['wordCount']} showWords={false} {...calendarMonthMatrix.props} />
-          </td>
+          <DayMatrix key={date} dateLabel={moment(date).format('Do')} date={date} wordCount={entry['wordCount']} showWords={false} {...calendarMonthMatrix.props} />
         );
       }
 
@@ -84,26 +83,42 @@ var CalendarMonthMatrix = React.createClass({
     result = weekRows.map(function(entry, index) {
       var key = calendarMonthMatrix.props.dateRangeOption + '-week' + index;
       return (
-        <tr key={key}> {entry} </tr>
+        <tr className="cal__week" key={key}> {entry} </tr>
       );
     });
 
+    tableClasses = {
+      'l--push-bottom-1': true,
+      'cal': true,
+      'cal--highlight': this.props.selectedContentState === ContentStates[1],
+      'cal--success': this.props.selectedContentState === ContentStates[2],
+      'cal--unsure': this.props.selectedContentState === ContentStates[3]
+    };
+
     clearClass = calendarMonthMatrix.props.selectedDay ? '' : 'is-hidden' ;
     heading = (
-      <td colSpan="7" className='message--highlight'>
-        <span className='txt--uppercase txt--align-center'>{firstDay.format('MMMM')}</span> (unit: words)
-        <span className={clearClass}><button className="button--link" onClick={this.handleClearSelection}>Clear selection</button></span>
-      </td>
+      <div className="l--push-bottom-half g">
+        <div className="g__item w--1-2">
+          <h3 className="epsilon txt--uppercase">{firstDay.format('MMMM')} Activity</h3>
+        </div>
+        <div className="g__item w--1-2 txt--align-right">
+          <p className={clearClass}><button className="button--link" onClick={this.handleClearSelection}>Clear selection</button></p>
+        </div>
+      </div>
     );
 
     return (
-      <table className="l--push-bottom-1">
-        <tbody>
-          <tr>{heading}</tr>
-          <tr>{this.props.weekDays}</tr>
-          {result}
-        </tbody>
-      </table>
+      <div>
+        {heading}
+        <table className={cx(tableClasses)}>
+          <thead className="cal__head">
+            <tr>{this.props.weekDays}</tr>
+          </thead>
+          <tbody>
+            {result}
+          </tbody>
+        </table>
+      </div>
     );
   }
 });

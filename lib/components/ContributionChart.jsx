@@ -131,7 +131,7 @@ var ContributionChart = React.createClass({
   render: function() {
     var chartData = convertMatrixDataToChartData(this.props.wordCountForEachDay);
     return (
-      <LineChart data={chartData} width="800" height="250"/>
+      <LineChart data={chartData} options={this.props.chartOptions} width="800" height="250"/>
     )
   }
 });

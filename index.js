@@ -1,8 +1,10 @@
 import React from 'react';
 import RecentContributions from './lib/components/RecentContributions';
+import Configs from './lib/constants/Configs';
 
 var mountNode = document.getElementById('userMatrixRoot'),
-  baseUrl;
-baseUrl = mountNode.getAttribute('data-base-url');
+  baseUrl = mountNode.getAttribute('data-base-url');
 
-React.render(<RecentContributions baseUrl={baseUrl} />, mountNode);
+Configs.baseUrl = baseUrl;
+
+React.render(<RecentContributions />, mountNode);

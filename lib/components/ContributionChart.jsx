@@ -1,8 +1,46 @@
 import React from 'react';
 import utilsDate from '../utils/DateHelper';
 import { Line } from 'react-chartjs';
+import {DateRanges} from '../constants/Options';
 
 var LineChart = Line;
+
+var defaultChartOptions = {
+  animationEasing: "easeOutQuart",
+  bezierCurve : true,
+  bezierCurveTension : 0.4,
+  pointDot : true,
+  pointDotRadius : 3,
+  // This doesn't seem to work
+  datasetStroke : true,
+  datasetStrokeWidth : 2,
+  datasetFill : true,
+  // TODO: Need to set this to true but it breaks
+  responsive: true,
+  showTooltips: true,
+  scaleFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
+  scaleFontColor: "#c6d2db",
+  scaleShowGridLines : false,
+  scaleGridLineColor : "rgba(198, 210, 219, .2)",
+  tooltipFillColor: "rgba(255,255,255,0.8)",
+  // String - Tooltip label font declaration for the scale label
+  tooltipFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
+  tooltipFontSize: 14,
+  tooltipFontStyle: '400',
+  tooltipFontColor: 'rgb(132, 168, 196)',
+  tooltipTitleFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
+  tooltipTitleFontSize: 14,
+  tooltipTitleFontStyle: '400',
+  tooltipTitleFontColor: 'rgb(65, 105, 136)',
+  tooltipYPadding: 6,
+  tooltipXPadding: 6,
+  tooltipCaretSize: 6,
+  tooltipCornerRadius: 2,
+  tooltipXOffset: 10,
+
+  //String - A legend template
+  legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+};
 
 function convertMatrixDataToChartData(matrixData) {
   var chartData = {
@@ -62,49 +100,34 @@ function convertMatrixDataToChartData(matrixData) {
   });
 
   return chartData;
-};
+}
 
 var ContributionChart = React.createClass({
+  propTypes: {
+    dateRangeOption: React.PropTypes.oneOf(DateRanges).isRequired,
+    wordCountForEachDay: React.PropTypes.arrayOf(
+      React.PropTypes.shape(
+        {
+          date: React.PropTypes.string.isRequired,
+          totalActivity: React.PropTypes.number.isRequired,
+          totalApproved: React.PropTypes.number.isRequired,
+          totalTranslated: React.PropTypes.number.isRequired,
+          totalNeedsWork: React.PropTypes.number.isRequired
+        })
+    ).isRequired
+  },
+
   getDefaultProps: function() {
     return {
-      chartOptions: {
-        animationEasing: "easeOutQuart",
-        bezierCurve : true,
-        bezierCurveTension : 0.4,
-        pointDot : true,
-        pointDotRadius : 3,
-        // This doesn't seem to work
-        datasetStroke : true,
-        datasetStrokeWidth : 2,
-        datasetFill : true,
-        // TODO: Need to set this to true but it breaks
-        responsive: true,
-        showTooltips: true,
-        scaleFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
-        scaleFontColor: "#c6d2db",
-        scaleShowGridLines : false,
-        scaleGridLineColor : "rgba(198, 210, 219, .2)",
-        tooltipFillColor: "rgba(255,255,255,0.8)",
-        // String - Tooltip label font declaration for the scale label
-        tooltipFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
-        tooltipFontSize: 14,
-        tooltipFontStyle: '400',
-        tooltipFontColor: 'rgb(132, 168, 196)',
-        tooltipTitleFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
-        tooltipTitleFontSize: 14,
-        tooltipTitleFontStyle: '400',
-        tooltipTitleFontColor: 'rgb(65, 105, 136)',
-        tooltipYPadding: 6,
-        tooltipXPadding: 6,
-        tooltipCaretSize: 6,
-        tooltipCornerRadius: 2,
-        tooltipXOffset: 10,
-
-        //String - A legend template
-        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
-      }
+      chartOptions: defaultChartOptions
     }
   },
+
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return this.props.dateRangeOption !== nextProps.dateRangeOption
+      || this.props.wordCountForEachDay.length !== nextProps.wordCountForEachDay.length;
+  },
+
   render: function() {
     var chartData = convertMatrixDataToChartData(this.props.wordCountForEachDay);
     return (

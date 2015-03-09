@@ -1,6 +1,10 @@
 import React from 'react';
+import Actions from '../actions/Actions';
+import {PureRenderMixin} from 'react/addons';
 
 var DropDown = React.createClass({
+  mixins: [PureRenderMixin],
+
   getInitialState: function() {
     return {dropdownIsActive: false};
   },
@@ -8,7 +12,7 @@ var DropDown = React.createClass({
   handleOptionClick: function(e) {
     var clickedOption = e.target.innerText;
     if (this.props.selectedOption != clickedOption) {
-      this.props.onOptionSelection(clickedOption);
+      Actions.changeDateRange(clickedOption);
     }
     this.setState({dropdownIsActive: false});
   },

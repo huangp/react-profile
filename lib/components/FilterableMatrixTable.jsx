@@ -1,73 +1,63 @@
 import React from 'react/addons';
-import _ from 'lodash';
 import ContentStateFilter from './ContentStateFilter';
-import MatrixTable from './MatrixTable';
 import CalendarMonthMatrix from './CalendarMonthMatrix'
 import CalendarPeriodHeading from './CalendarPeriodHeading';
 import CategoryMatrixTable from './CategoryMatrixTable';
-import dataFilter from '../utils/DataFilters'
+import {DateRanges} from '../constants/Options';
+import {ContentStates} from '../constants/Options';
 
 var FilterableMatrixTable = React.createClass({
-  getDefaultProps: function() {
-    return {
-      contentStateOptions: [
-        ['Total', 'pill--secondary'],
-        ['Approved', 'pill--highlight'],
-        ['Translated', 'pill--success'],
-        ['Needs Work', 'pill--unsure']]
-    }
-  },
-
-  getInitialState: function() {
-    return {
-      selectedContentState: 'Total',
-      selectedDay: null
-    }
-  },
-
-  onDaySelection: function(day) {
-    var newState = React.addons.update(this.state, {
-      selectedDay: {$set: day}
-    });
-    this.setState(newState);
-  },
-
-  onContentStateSelection: function(contentState) {
-    var newState = React.addons.update(this.state, {
-      selectedContentState: {$set: contentState}
-    });
-    this.setState(newState);
+  propTypes: {
+    wordCountForEachDay: React.PropTypes.arrayOf(
+      React.PropTypes.shape(
+        {
+          date: React.PropTypes.string.isRequired,
+          wordCount: React.PropTypes.number.isRequired,
+        })
+    ).isRequired,
+    wordCountForSelectedDay: React.PropTypes.arrayOf(
+      React.PropTypes.shape(
+        {
+          savedDate: React.PropTypes.string.isRequired,
+          projectSlug: React.PropTypes.string.isRequired,
+          projectName: React.PropTypes.string.isRequired,
+          versionSlug: React.PropTypes.string.isRequired,
+          localeId: React.PropTypes.string.isRequired,
+          localeDisplayName: React.PropTypes.string.isRequired,
+          savedState: React.PropTypes.string.isRequired,
+          wordCount: React.PropTypes.number.isRequired
+        })
+    ).isRequired,
+    fromDate: React.PropTypes.string.isRequired,
+    toDate: React.PropTypes.string.isRequired,
+    dateRangeOption: React.PropTypes.oneOf(DateRanges).isRequired,
+    selectedContentState: React.PropTypes.oneOf(ContentStates).isRequired,
+    selectedDay: React.PropTypes.string
   },
 
   render: function () {
-    var selectedContentState = this.state.selectedContentState,
-      categoryTables,
-      dataFilteredByContentState,
-      dataFilteredByContentStateAndDay;
+    var selectedContentState = this.props.selectedContentState,
+      selectedDay = this.props.selectedDay,
+      categoryTables;
 
-    dataFilteredByContentState = dataFilter.mapTotalWordCountByContentState(this.props.wordCountForEachDay, selectedContentState);
-
-    dataFilteredByContentStateAndDay = dataFilter.filterByContentStateAndDay(this.props.serverData, selectedContentState, this.state.selectedDay);
-
-    if (dataFilteredByContentStateAndDay.length > 0) {
+    if (this.props.wordCountForSelectedDay.length > 0) {
       categoryTables =
         [
-          <CategoryMatrixTable key='locales' matrixData={dataFilteredByContentStateAndDay} category='localeId' categoryTitle='localeDisplayName' categoryName='Languages' />,
-          <CategoryMatrixTable key='projects' matrixData={dataFilteredByContentStateAndDay} category='projectSlug' categoryTitle='projectName' categoryName='Projects' />
+          <CategoryMatrixTable key='locales' matrixData={this.props.wordCountForSelectedDay} category='localeId' categoryTitle='localeDisplayName' categoryName='Languages' />,
+          <CategoryMatrixTable key='projects' matrixData={this.props.wordCountForSelectedDay} category='projectSlug' categoryTitle='projectName' categoryName='Projects' />
         ];
     } else {
       categoryTables = <div>No translation was done</div>
     }
     return (
       <div>
-        <ContentStateFilter selectedContentState={selectedContentState} onContentStateSelection={this.onContentStateSelection} {...this.props}  />
+        <ContentStateFilter selectedContentState={selectedContentState}  />
         <div className="g">
           <div className="g__item w--1-2-l w--1-2-h">
-            <MatrixTable matrixData={dataFilteredByContentState} onDaySelection={this.onDaySelection} selectedDay={this.state.selectedDay} selectedContentState={this.state.selectedContentState} {...this.props}/>
-            <CalendarMonthMatrix matrixData={dataFilteredByContentState} onDaySelection={this.onDaySelection} selectedDay={this.state.selectedDay} selectedContentState={this.state.selectedContentState} {...this.props} />
+            <CalendarMonthMatrix matrixData={this.props.wordCountForEachDay} selectedDay={selectedDay} selectedContentState={selectedContentState} dateRangeOption={this.props.dateRangeOption} />
           </div>
           <div className="g__item w--1-2-l w--1-2-h">
-            <CalendarPeriodHeading fromDate={this.props.fromDate} toDate={this.props.toDate} dateRange={this.props.dateRange} selectedDay={this.state.selectedDay}/>
+            <CalendarPeriodHeading fromDate={this.props.fromDate} toDate={this.props.toDate} dateRange={this.props.dateRangeOption} selectedDay={selectedDay}/>
             {categoryTables}
           </div>
         </div>

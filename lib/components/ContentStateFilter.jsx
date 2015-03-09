@@ -1,21 +1,30 @@
 import React from 'react';
+import Actions from '../actions/Actions';
+import {ContentStates, ContentStateStyles} from '../constants/Options';
+import {PureRenderMixin} from 'react/addons';
 
 var ContentStateFilter = React.createClass({
+  mixins: [PureRenderMixin],
+
+  propTypes: {
+    selectedContentState: React.PropTypes.oneOf(ContentStates).isRequired
+  },
+
   onFilterOptionClicked: function(option, event) {
     if (this.props.selectedContentState !== option) {
-      this.props.onContentStateSelection(option);
+      Actions.changeContentState(option);
     }
   },
+
   render: function() {
     var contentStateFilter= this,
       selected = this.props.selectedContentState,
       clickHandler = this.onFilterOptionClicked,
       optionItems;
 
-    optionItems = this.props.contentStateOptions.map(function(optionAndStyle) {
-      var option = optionAndStyle[0],
-          optionStyle = optionAndStyle[1],
-          buttonStyle = 'pill pill--inline '
+    optionItems = ContentStates.map(function(option, index) {
+      var optionStyle = ContentStateStyles[index],
+          buttonStyle = 'pill pill--inline ';
           buttonStyle += selected === option ? optionStyle + ' is-active' : optionStyle;
 
       return (

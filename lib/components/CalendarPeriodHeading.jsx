@@ -16,7 +16,7 @@ var CalendarPeriodHeading = React.createClass(
         period = moment(this.props.fromDate, stdFmt).format(dateRangeDisplayFmt)
         + ' … '
         + moment(this.props.toDate, stdFmt).format(dateRangeDisplayFmt)
-        + '(' + this.props.dateRange + ')';
+        + ' (' + this.props.dateRange + ')';
       }
       return (
         <div className='l--push-bottom-half'>

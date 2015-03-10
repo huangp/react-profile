@@ -48,9 +48,9 @@ var DayMatrix = React.createClass({
     });
 
     return (
-      <td className={cx(rowClass)} onClick={this.handleDayClick}>
+      <td className={cx(rowClass)} onClick={this.handleDayClick} title={this.props.wordCount + ' words'}>
         <div className="cal__date">{this.props.dateLabel}</div>
-        <div className="cal__date-info" title="{this.props.wordCount} words">{wordCount}</div>
+        <div className="cal__date-info">{wordCount}</div>
       </td>
     );
   }

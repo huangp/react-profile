@@ -2,6 +2,7 @@ import React from 'react/addons';
 import {ContentStates, ContentStateStyles} from '../constants/Options';
 import Actions from '../actions/Actions';
 import {PureRenderMixin} from 'react/addons';
+import dateUtil from '../utils/DateHelper';
 
 var DayMatrix = React.createClass({
   mixins: [PureRenderMixin],
@@ -9,7 +10,8 @@ var DayMatrix = React.createClass({
   propTypes: {
     dateLabel: React.PropTypes.string.isRequired,
     date: React.PropTypes.string.isRequired,
-    wordCount: React.PropTypes.number.isRequired
+    wordCount: React.PropTypes.number.isRequired,
+    selectedDay: React.PropTypes.string
   },
 
 
@@ -26,14 +28,20 @@ var DayMatrix = React.createClass({
   render: function() {
     var cx = React.addons.classSet,
       selectedContentState = this.props.selectedContentState,
+    // Note: this will make this component impure. But it will only become
+    // impure when you render it between midnight, e.g. two re-render attempt
+    // happen across two days with same props, which I think it's ok.
+      dateIsInFuture = dateUtil.isInFuture(this.props.date),
+      wordCount = dateIsInFuture ? '' : this.props.wordCount,
       rowClass;
 
     rowClass = {
       'cal__day': true,
-      // Add this for days that are in the future
-      // 'is-disabled': true,
-      'is-active': this.props.date === this.props.selectedDay,
+      'is-disabled': dateIsInFuture,
+      'is-active': this.props.date === this.props.selectedDay
     };
+
+
 
     ContentStates.forEach(function(option, index) {
       rowClass[ContentStateStyles[index]] = selectedContentState === option;
@@ -42,7 +50,7 @@ var DayMatrix = React.createClass({
     return (
       <td className={cx(rowClass)} onClick={this.handleDayClick}>
         <div className="cal__date">{this.props.dateLabel}</div>
-        <div className="cal__date-info" title="{this.props.wordCount} words">{this.props.wordCount}</div>
+        <div className="cal__date-info" title="{this.props.wordCount} words">{wordCount}</div>
       </td>
     );
   }

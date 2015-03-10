@@ -64,12 +64,12 @@ var CalendarMonthMatrix = React.createClass({
         dayColumns = [];
         weekRows.push(dayColumns);
       }
-      if (weekRows.length == 0 && dayTracker < firstDayWeekDay) {
+      if (weekRows.length == 1 && dayTracker < firstDayWeekDay) {
         // for the first week, we pre-fill missing week days
         dayColumns.push(<td className="cal__day" key={firstDay.weekday(dayTracker).format()}></td>);
       } else {
         dayColumns.push(
-          <DayMatrix key={date} dateLabel={moment(date).format('Do')} date={date} wordCount={entry['wordCount']} showWords={false} {...calendarMonthMatrix.props} />
+          <DayMatrix key={date} dateLabel={moment(date).format('Do')} date={date} wordCount={entry['wordCount']} selectedDay={calendarMonthMatrix.props.selectedDay} />
         );
       }
 

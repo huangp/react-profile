@@ -11,7 +11,7 @@ var CalendarMonthMatrix = React.createClass({
       React.PropTypes.shape(
         {
           date: React.PropTypes.string.isRequired,
-          wordCount: React.PropTypes.number.isRequired,
+          wordCount: React.PropTypes.number.isRequired
         })
     ).isRequired,
     selectedDay: React.PropTypes.string,
@@ -20,7 +20,8 @@ var CalendarMonthMatrix = React.createClass({
   },
 
   getDefaultProps: function() {
-    // this is to make week days locale aware and making sure it align with below display
+    // this is to make week days locale aware and making sure it align with
+    // below display
     var now = moment(),
       weekDays = [],
       weekDay;
@@ -38,68 +39,47 @@ var CalendarMonthMatrix = React.createClass({
   },
 
   render: function() {
-    var calendarMonthMatrix = this,
+    var selectedDay = this.props.selectedDay,
       cx = React.addons.classSet,
+      clearClass = this.props.selectedDay ? '' : 'is-hidden',
+      tableClasses = {
+        'l--push-bottom-1': true,
+        'cal': true,
+        'cal--highlight': this.props.selectedContentState === ContentStates[1],
+        'cal--success': this.props.selectedContentState === ContentStates[2],
+        'cal--unsure': this.props.selectedContentState === ContentStates[3]
+      },
       matrixData = this.props.matrixData,
-      weekRows = [],
-      dayTracker = 0,
-      firstDay, firstDayWeekDay,
-      dayColumns,
-      tableClasses,
-      heading,
-      result,
-      clearClass;
+      days = [], result = [],
+      dayColumns, firstDay, heading;
 
     if (matrixData.length == 0) {
       return <table><tr><td>Loading</td></tr></table>
     }
 
     firstDay = moment(matrixData[0]['date']);
-    firstDayWeekDay = firstDay.weekday();
+    for (var i = firstDay.weekday() - 1; i >= 0; i--) {
+      // for the first week, we pre-fill missing week days
+      days.push(<td className="cal__day" key={firstDay.weekday(i).format()}></td>);
+    }
 
     matrixData.forEach(function(entry) {
       var date = entry['date'];
 
-      if (dayTracker == 0) {
-        dayColumns = [];
-        weekRows.push(dayColumns);
-      }
-      if (weekRows.length == 1 && dayTracker < firstDayWeekDay) {
-        // for the first week, we pre-fill missing week days
-        dayColumns.push(<td className="cal__day" key={firstDay.weekday(dayTracker).format()}></td>);
-      } else {
-        dayColumns.push(
-          <DayMatrix key={date} dateLabel={moment(date).format('Do')} date={date} wordCount={entry['wordCount']} selectedDay={calendarMonthMatrix.props.selectedDay} />
-        );
-      }
-
-      dayTracker++;
-      if (dayTracker == 7) {
-        // one week has finished. move on to next week.
-        dayTracker = 0;
-      }
-    });
-
-    result = weekRows.map(function(entry, index) {
-      var key = calendarMonthMatrix.props.dateRangeOption + '-week' + index;
-      return (
-        <tr className="cal__week" key={key}> {entry} </tr>
+      days.push(
+        <DayMatrix key={date} dateLabel={moment(date).format('Do')} date={date} wordCount={entry['wordCount']} selectedDay={selectedDay} />
       );
     });
 
-    tableClasses = {
-      'l--push-bottom-1': true,
-      'cal': true,
-      'cal--highlight': this.props.selectedContentState === ContentStates[1],
-      'cal--success': this.props.selectedContentState === ContentStates[2],
-      'cal--unsure': this.props.selectedContentState === ContentStates[3]
-    };
+    while(days.length) {
+      dayColumns = days.splice(0, 7);
+      result.push(<tr className="cal__week" key={this.props.dateRangeOption + '-week' + result.length}> {dayColumns} </tr>);
+    }
 
-    clearClass = calendarMonthMatrix.props.selectedDay ? '' : 'is-hidden' ;
     heading = (
       <div className="l--push-bottom-half g">
         <div className="g__item w--1-2">
-          <h3 className="epsilon txt--uppercase">{firstDay.format('MMMM')} Activity</h3>
+          <h3 className="epsilon txt--uppercase">{this.props.dateRangeOption}'s Activity</h3>
         </div>
         <div className="g__item w--1-2 txt--align-right">
           <p className={clearClass}><button className="button--link" onClick={this.handleClearSelection}>Clear selection</button></p>

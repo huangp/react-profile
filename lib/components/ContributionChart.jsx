@@ -6,11 +6,11 @@ import {DateRanges} from '../constants/Options';
 var LineChart = Line;
 
 var defaultChartOptions = {
-  animationEasing: "easeOutQuart",
+  animationEasing: "easeOutElastic",
   bezierCurve : true,
   bezierCurveTension : 0.4,
   pointDot : true,
-  pointDotRadius : 3,
+  pointDotRadius : 4,
   // This doesn't seem to work
   datasetStroke : true,
   datasetStrokeWidth : 2,
@@ -19,11 +19,15 @@ var defaultChartOptions = {
   responsive: true,
   showTooltips: true,
   scaleFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
-  scaleFontColor: "#c6d2db",
-  scaleShowGridLines : false,
+  scaleFontColor: "#7c96ac",
+  scaleShowGridLines : true,
+  scaleShowVerticalLines: false,
   scaleGridLineColor : "rgba(198, 210, 219, .2)",
   tooltipFillColor: "rgba(255,255,255,0.8)",
-  // String - Tooltip label font declaration for the scale label
+  // scaleOverride : true,
+  // scaleSteps : 10,
+  // scaleStepWidth : 100,
+  // scaleStartValue : 0,
   tooltipFontFamily: '"Source Sans Pro", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif',
   tooltipFontSize: 14,
   tooltipFontStyle: '400',
@@ -37,9 +41,7 @@ var defaultChartOptions = {
   tooltipCaretSize: 6,
   tooltipCornerRadius: 2,
   tooltipXOffset: 10,
-
-  //String - A legend template
-  legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+  multiTooltipTemplate: "<%= value %><%if (datasetLabel){%> (<%= datasetLabel %>)<%}%>"
 };
 
 function convertMatrixDataToChartData(matrixData) {

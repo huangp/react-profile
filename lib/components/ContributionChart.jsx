@@ -90,15 +90,21 @@ function convertMatrixDataToChartData(matrixData) {
       }
     ]
   },
-    numOfDays = matrixData.length;
+    numOfDays = matrixData.length,
+    intoTheFuture = false;
+
 
   matrixData.forEach(function(value) {
-    chartData.labels.push(utilsDate.dayAsLabel(value['date'], numOfDays));
+    var date = value['date'];
+    intoTheFuture = intoTheFuture || utilsDate.isInFuture(date);
+    chartData.labels.push(utilsDate.dayAsLabel(date, numOfDays));
 
-    chartData['datasets'][0]['data'].push(value['totalActivity']);
-    chartData['datasets'][1]['data'].push(value['totalTranslated']);
-    chartData['datasets'][2]['data'].push(value['totalNeedsWork']);
-    chartData['datasets'][3]['data'].push(value['totalApproved']);
+    if (!intoTheFuture) {
+      chartData['datasets'][0]['data'].push(value['totalActivity']);
+      chartData['datasets'][1]['data'].push(value['totalTranslated']);
+      chartData['datasets'][2]['data'].push(value['totalNeedsWork']);
+      chartData['datasets'][3]['data'].push(value['totalApproved']);
+    }
   });
 
   return chartData;

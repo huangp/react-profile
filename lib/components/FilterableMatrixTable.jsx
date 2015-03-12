@@ -47,7 +47,7 @@ var FilterableMatrixTable = React.createClass({
           <CategoryMatrixTable key='projects' matrixData={this.props.wordCountForSelectedDay} category='projectSlug' categoryTitle='projectName' categoryName='Projects' />
         ];
     } else {
-      categoryTables = <div>No translation was done</div>
+      categoryTables = <div>No contributions</div>
     }
     return (
       <div>

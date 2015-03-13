@@ -6,7 +6,7 @@ import {DateRanges} from '../constants/Options';
 var LineChart = Line;
 
 var defaultChartOptions = {
-  animationEasing: "easeOutElastic",
+  animationEasing: "easeOutQuint",
   bezierCurve : true,
   bezierCurveTension : 0.4,
   pointDot : true,
@@ -22,7 +22,7 @@ var defaultChartOptions = {
   scaleFontColor: "#7c96ac",
   scaleShowGridLines : true,
   scaleShowVerticalLines: false,
-  scaleGridLineColor : "rgba(198, 210, 219, .2)",
+  scaleGridLineColor : "rgba(198, 210, 219, .1)",
   tooltipFillColor: "rgba(255,255,255,0.8)",
   // scaleOverride : true,
   // scaleSteps : 10,
@@ -50,7 +50,7 @@ function convertMatrixDataToChartData(matrixData) {
     datasets: [
       {
         label: 'Total',
-        fillColor: 'rgba(65, 105, 136, .2)',
+        fillColor: 'rgba(65, 105, 136, .05)',
         strokeColor: 'rgb(65, 105, 136)',
         pointColor: 'rgb(65, 105, 136)',
         pointStrokeColor: '#fff',
@@ -60,7 +60,7 @@ function convertMatrixDataToChartData(matrixData) {
       },
       {
         label: 'Translated',
-        fillColor: 'rgba(112,169,139, .2)',
+        fillColor: 'rgba(112,169,139, .05)',
         strokeColor: 'rgb(112,169,139)',
         pointColor: 'rgb(112,169,139)',
         pointStrokeColor: '#fff',
@@ -70,7 +70,7 @@ function convertMatrixDataToChartData(matrixData) {
       },
       {
         label: 'Needs Work',
-        fillColor: 'rgba(224,195,80, .2)',
+        fillColor: 'rgba(224,195,80, .05)',
         strokeColor: 'rgb(224,195,80)',
         pointColor: 'rgb(224,195,80)',
         pointStrokeColor: '#fff',
@@ -80,7 +80,7 @@ function convertMatrixDataToChartData(matrixData) {
       },
       {
         label: 'Approved',
-        fillColor: "rgba(78, 159, 221, .2)",
+        fillColor: "rgba(78, 159, 221, .05)",
         strokeColor: 'rgb(78, 159, 221)',
         pointColor: 'rgb(78, 159, 221)',
         pointStrokeColor: '#fff',

@@ -9,10 +9,9 @@ var DropDown = React.createClass({
     return {dropdownIsActive: false};
   },
 
-  handleOptionClick: function(e) {
-    var clickedOption = e.target.innerText;
-    if (this.props.selectedOption != clickedOption) {
-      Actions.changeDateRange(clickedOption);
+  handleOptionClick: function(option) {
+    if (this.props.selectedOption != option) {
+      Actions.changeDateRange(option);
     }
     this.setState({dropdownIsActive: false});
   },
@@ -35,7 +34,7 @@ var DropDown = React.createClass({
       var buttonClassName = 'button--link txt--nowrap';
       buttonClassName += option === selected ? ' is-active' : '';
       return <li key={option} className='Dropdown-item'>
-        <button className={buttonClassName} onClick={self.handleOptionClick}>{option}</button>
+        <button className={buttonClassName} onClick={self.handleOptionClick.bind(self, option)}>{option}</button>
       </li>
     });
 
